@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'java-gradle-plugin'
+}
+
+group = 'io.github.xenfork'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+}
+
+gradlePlugin {
+    plugins {
+        acl {
+            id = "acl"
+            implementationClass = "io.github.xenfork.acl.Main"
+        }
+    }
+}
