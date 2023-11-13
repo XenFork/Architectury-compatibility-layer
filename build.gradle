@@ -33,13 +33,22 @@ dependencies {
 tasks.shadowJar {
     from("LICENSE")
 }
-
+//using ★ and ☆
 gradlePlugin {
+
     plugins {
+        create("pre-acl") {
+            id = "pre-acl"
+            implementationClass = "io.github.xenfork.acl.MainSettings"
+        }// ☆ to step build-acl
+        create("build-acl") {
+            id = "build-acl"
+            implementationClass = "io.github.xenfork.acl.Main"
+        }// ☆
         create("acl") {
             id = "acl"
-            implementationClass = "io.github.xenfork.acl.Main"
-        }
+            implementationClass = "io.xenfork.acl.MainAware"
+        }// ★★★★★★
     }
 }
 

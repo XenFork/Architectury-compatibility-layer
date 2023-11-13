@@ -5,7 +5,9 @@ import io.github.xenfork.acl.tasks.ForgeTask;
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.initialization.IncludedBuild;
+import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.TaskProvider;
@@ -22,6 +24,12 @@ public class Main implements Plugin<Project> {
     public void apply(@NotNull Project target) {
         PropertiesSet set = target.getExtensions().create("acl", PropertiesSet.class);
         SourceSetContainer sourceSets = target.getExtensions().getByType(SourceSetContainer.class);
+        Project common = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("common")).toList().get(0);
+        Project fabric = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("fabric")).toList().get(0);
+        Project forge = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("forge")).toList().get(0);
+        SourceSetContainer commonSourceSet = common.getExtensions().getByType(SourceSetContainer.class);
+        SourceSetContainer fabricSourceSet = fabric.getExtensions().getByType(SourceSetContainer.class);
+        SourceSetContainer forgeSourceSet = forge.getExtensions().getByType(SourceSetContainer.class);
         target.afterEvaluate(project -> {
             init(set, project);// init acl extensions
             File commonTagFile = FileUtils.getFile(project.getBuildFile(), "generated", "sources", "commonTags");
@@ -37,19 +45,20 @@ public class Main implements Plugin<Project> {
                 task.getOutputDir().set(forgeTagFile);
             });
 
-            SourceSet tagsCommon = sourceSets.create("commonTags", sourceSet -> {
+            SourceSet tagsCommon = commonSourceSet.create("commonTags", sourceSet -> {
                 sourceSet.getJava().setSrcDirs(project.files(commonTagFile).builtBy(genTags));
             });
-            SourceSet tagsFabric = sourceSets.create("fabricTags", sourceSet -> {
+            SourceSet tagsFabric = fabricSourceSet.create("fabricTags", sourceSet -> {
                 sourceSet.getJava().setSrcDirs(project.files(fabricTagFile).builtBy(fabricTags));
             });
 
-            SourceSet tagsForge = sourceSets.create("forgeTags", sourceSet -> {
+            SourceSet tagsForge = forgeSourceSet.create("forgeTags", sourceSet -> {
                 sourceSet.getJava().setSrcDirs(project.files(fabricTagFile).builtBy(forgeTags));
             });
-            project.getTasks().named(tagsCommon.getCompileJavaTaskName()).configure(task -> task.dependsOn(genTags));
-            project.getTasks().named(tagsFabric.getCompileJavaTaskName()).configure(task -> task.dependsOn(fabricTags));
-            project.getTasks().named(tagsForge.getCompileJavaTaskName()).configure(task -> task.dependsOn(forgeTags));
+            common.getTasks().named(tagsCommon.getCompileJavaTaskName()).configure(task -> task.dependsOn(genTags));
+            fabric.getTasks().named(tagsFabric.getCompileJavaTaskName()).configure(task -> task.dependsOn(fabricTags));
+            forge.getTasks().named(tagsForge.getCompileJavaTaskName()).configure(task -> task.dependsOn(forgeTags));
+
 
         });
     }
