@@ -1,2 +1,14 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
 rootProject.name = 'acl'
 
+include("core")
+include("test")
+project(":core").name="acl-core"
+project(":test").name="acl-test"

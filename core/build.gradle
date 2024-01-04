@@ -1,18 +1,19 @@
 plugins {
-    id 'java'
     id 'groovy'
     id 'java-gradle-plugin'
+    id 'java'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'maven-publish'
 }
 
 group = 'io.github.xenfork'
-version = '1.0-SNAPSHOT'
+version = '1.3-SNAPSHOT'
 
 repositories {
     google()
     jcenter()
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -61,12 +62,20 @@ tasks.shadowJar.configure {
 }
 
 tasks.jar.configure {
-    enabled = false
+    enabled = true
     dependsOn(tasks.shadowJar)
 }
 
 publishing {
     repositories {
         mavenLocal()
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.name
+            version project.version
+            from components.java
+        }
     }
 }
