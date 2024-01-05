@@ -12,7 +12,15 @@ public class Main implements Plugin<Project> {
     @Override
     public void apply(@NotNull Project target) {
         PropertiesSet set = target.getExtensions().create("acl", PropertiesSet.class);
+        target.afterEvaluate(project -> {
+            String projects = (String) project.getProperties().get("sts.projects");
+            for (String name : projects.split(",")) {
+                Project common = project.findProject(":" + name + "-common");
 
+                Project fabric = project.findProject(":" + name + "-fabric");
+                Project forge = project.findProject(":" + name + "-forge");
+            }
+        });
 //        SourceSetContainer sourceSets = target.getExtensions().getByType(SourceSetContainer.class);
 //        Project common = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("common")).toList().get(0);
 //        Project fabric = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("fabric")).toList().get(0);
