@@ -1,5 +1,7 @@
 package io.github.xenfork.acl;
 
+import io.github.xenfork.acl.projects.Main;
+import io.github.xenfork.acl.settings.MainSettings;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.initialization.Settings;
@@ -8,26 +10,22 @@ import org.gradle.api.plugins.PluginContainer;
 import org.jetbrains.annotations.NotNull;
 
 public class MainAware implements Plugin<PluginAware> {
+
     @Override
     public void apply(@NotNull PluginAware target) {
+
        if (target instanceof Settings settings) {
-           apply(settings.getPlugins(), MainSettings.class);
            new MainSettings().apply(settings);
        } else if (target instanceof Project project) {
+           project.getLogger().info("load project" + project.getName());
            apply(
                    project.getPlugins(),
                    "java",
                    "maven-publish"
            );
-           apply(project.getPlugins(), Main.class);
-       }
-    }
+           new Main().apply(project);
 
-    @SafeVarargs
-    public static void apply(PluginContainer plugins, Class<? extends Plugin<?>>... p) {
-        for (Class<? extends Plugin<?>> aClass : p) {
-            plugins.apply(aClass);
-        }
+       }
     }
 
     public static void apply(PluginContainer plugins, String... strings) {

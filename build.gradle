@@ -1,1 +1,7 @@
+plugins {
+    id "acl" version "$acl_test_version"
+}
 
+acl {
+    mcversion="1.19.2"
+}

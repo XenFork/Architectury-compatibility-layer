@@ -40,11 +40,11 @@ gradlePlugin {
     plugins {
         create("pre-acl") {
             id = "pre-acl"
-            implementationClass = "io.github.xenfork.acl.MainSettings"
+            implementationClass = "io.github.xenfork.acl.settings.MainSettings"
         }// ☆ to step build-acl
         create("build-acl") {
             id = "build-acl"
-            implementationClass = "io.github.xenfork.acl.Main"
+            implementationClass = "io.github.xenfork.acl.projects.Main"
         }// ☆
         create("acl") {
             id = "acl"
