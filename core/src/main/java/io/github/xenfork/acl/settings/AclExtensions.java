@@ -3,13 +3,9 @@ package io.github.xenfork.acl.settings;
 import java.util.Arrays;
 
 public class AclExtensions {
-    public String projects;
+    String projects;
 
-    public void setProjects(String projects) {
-        this.projects = projects;
-    }
-
-    public String getProjects() {
+    String getProjects() {
         return projects;
     }
 }

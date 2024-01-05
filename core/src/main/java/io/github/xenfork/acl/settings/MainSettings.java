@@ -20,6 +20,7 @@ public class MainSettings implements Plugin<Settings> {
             properties.load(new BufferedReader(new FileReader(new File(target.getRootProject().getProjectDir(), "gradle.properties"))));
             sts.projects = properties.getProperty("sts.projects");
         } catch (IOException ignored) {}
+
         if (sts.projects != null) {
             System.out.println("test");
             for (String project : sts.getProjects().split(",")) {
