@@ -1,6 +1,7 @@
 package io.github.xenfork.acl;
 
 import org.gradle.api.Plugin;
+
 import org.gradle.api.initialization.Settings;
 import org.jetbrains.annotations.NotNull;
 
