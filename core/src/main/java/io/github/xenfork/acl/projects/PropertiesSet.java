@@ -3,7 +3,7 @@ package io.github.xenfork.acl.projects;
 import io.github.xenfork.acl.mappings.Type;
 
 public class PropertiesSet {
-    private String mcversion, group, project$name;
+    private String mcversion, group, project$name, srg;
     public Type mappings;
 
     public String getGroup() {
@@ -38,5 +38,18 @@ public class PropertiesSet {
         if (mappings == null)
             mappings = Type.mojang;
         return mappings;
+    }
+
+    public void setSrg(String srg) {
+        this.srg = srg;
+    }
+
+    public String getSrg() {
+        //mojang的时候可空 空为原生，非空为parchment mapoing
+        //parchment 如果想跨版本点映射获取请书写 version:parchment version
+        //否则只需要书写当前的parchment即可
+        //yarn模式下它不可为空，跨版本和上同理，不需要写入build.
+        //mcp模式暂时缺省。
+        return srg;
     }
 }
