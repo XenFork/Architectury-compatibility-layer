@@ -1,5 +1,8 @@
 package io.github.xenfork.acl.projects;
 
+import io.github.xenfork.acl.mappings.Mojang;
+import io.github.xenfork.acl.mappings.Type;
+import io.github.xenfork.acl.mappings.Yarn;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.jetbrains.annotations.NotNull;
@@ -11,10 +14,10 @@ public class Main implements Plugin<Project> {
 
     @Override
     public void apply(@NotNull Project target) {
-        PropertiesSet set = target.getExtensions().create("acl", PropertiesSet.class);
+        AclExtensions acl = target.getExtensions().create("acl", AclExtensions.class);
         target.afterEvaluate(project -> {
             String projects = (String) project.getProperties().get("sts.projects");
-            init(set, project);
+            init(acl, project);
             for (String name : projects.split(",")) {
                 Project common = project.findProject(":" + name + "-common");
 
@@ -62,15 +65,42 @@ public class Main implements Plugin<Project> {
 //        });
     }
 
-    private static void init(PropertiesSet set, Project project) {
-        if (set.getMcversion() == null) {
-            throw new RuntimeException("don't set minecraft version");
+    private static void init(AclExtensions acl, Project project) {
+        if (acl.getMcversion() == null) {
+            if (project.getProperties().containsKey("acl.mcversion")) 
+                acl.setMcversion(String.valueOf(project.getProperties().get("acl.mcversion")));
+
+            else
+                throw new RuntimeException("don't set minecraft version");
         }
-        if (set.getProject$name() == null) {
-            set.setProject$name(project.getName());
+        if (acl.getProject$name() == null) {
+            acl.setProject$name(project.getName());
         }
-        if (set.getGroup() == null) {
-            set.setGroup("io.github.xenfork");
+        if (acl.getGroup() == null) {
+            acl.setGroup("io.github.xenfork");
+        }
+        Type mappings = acl.getMappings();
+        String srg = acl.getSrg();
+        if (mappings instanceof Mojang) {
+
+            if (!srg.isEmpty()) {
+                if (srg.contains(":")) {
+                    AclExtensions.srg_out = "org.parchmentmc.data:parchment-%s@zip".formatted(srg);
+                } else {
+                    AclExtensions.srg_out = "org.parchmentmc.data.parchment-%s:%s@zip".formatted(acl.getMcversion(), srg);
+                }
+            }
+        }
+        else if (mappings instanceof Yarn) {
+            if (srg.isEmpty()) {
+                throw new RuntimeException("this yarn mapping is null");
+            }
+            if (srg.contains(":")) {
+                String[] split = srg.split(":", 2);
+                AclExtensions.srg_out = "net.fabricmc:yarn:%s+build.%s".formatted(split[0], split[1]);
+            } else {
+                AclExtensions.srg_out = "net.fabricmc:yarn:%s+build.%s".formatted(acl.getMcversion(), srg);
+            }
         }
     }
 }

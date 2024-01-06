@@ -2,8 +2,9 @@ package io.github.xenfork.acl.projects;
 
 import io.github.xenfork.acl.mappings.Type;
 
-public class PropertiesSet {
+public class AclExtensions {
     private String mcversion, group, project$name, srg;
+    public static String srg_out;
     public Type mappings;
 
     public String getGroup() {
@@ -50,6 +51,8 @@ public class PropertiesSet {
         //否则只需要书写当前的parchment即可
         //yarn模式下它不可为空，跨版本和上同理，不需要写入build.
         //mcp模式暂时缺省。
+        if (srg == null)
+            srg = "";
         return srg;
     }
 }
