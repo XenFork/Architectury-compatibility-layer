@@ -1,7 +1,10 @@
 package io.github.xenfork.acl.projects;
 
+import io.github.xenfork.acl.mappings.Type;
+
 public class PropertiesSet {
     private String mcversion, group, project$name;
+    public Type mappings;
 
     public String getGroup() {
         return group;
@@ -25,5 +28,15 @@ public class PropertiesSet {
 
     public void setProject$name(String project$name) {
         this.project$name = project$name;
+    }
+
+    public void setMappings(Type mappings) {
+        this.mappings = mappings;
+    }
+
+    public Type getMappings() {
+        if (mappings == null)
+            mappings = Type.mojang;
+        return mappings;
     }
 }

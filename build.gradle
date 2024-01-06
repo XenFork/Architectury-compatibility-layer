@@ -4,4 +4,5 @@ plugins {
 
 acl {
     mcversion="1.19.2"
+    group = "io.github.xenfork"
 }

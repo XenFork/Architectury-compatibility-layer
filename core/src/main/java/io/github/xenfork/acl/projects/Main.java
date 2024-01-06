@@ -14,6 +14,7 @@ public class Main implements Plugin<Project> {
         PropertiesSet set = target.getExtensions().create("acl", PropertiesSet.class);
         target.afterEvaluate(project -> {
             String projects = (String) project.getProperties().get("sts.projects");
+            init(set, project);
             for (String name : projects.split(",")) {
                 Project common = project.findProject(":" + name + "-common");
 
