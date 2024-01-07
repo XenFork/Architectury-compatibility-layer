@@ -1,8 +1,11 @@
 package io.github.xenfork.acl.projects;
 
+import dev.architectury.plugin.ArchitectPluginExtension;
+import dev.architectury.plugin.ArchitecturyPlugin;
 import io.github.xenfork.acl.mappings.Mojang;
 import io.github.xenfork.acl.mappings.Type;
 import io.github.xenfork.acl.mappings.Yarn;
+import io.github.xenfork.acl.projects.sub.*;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.jetbrains.annotations.NotNull;
@@ -11,19 +14,41 @@ public class Main implements Plugin<Project> {
     public static void main(String[] args) {
         System.out.println("Hello world!");
     }
-
+    public static AclExtensions acl;
     @Override
     public void apply(@NotNull Project target) {
-        AclExtensions acl = target.getExtensions().create("acl", AclExtensions.class);
-        target.afterEvaluate(project -> {
-            String projects = (String) project.getProperties().get("sts.projects");
-            init(acl, project);
+        target.getPlugins().apply(ArchitecturyPlugin.class);
+        acl = target.getExtensions().create("acl", AclExtensions.class);
+        String projects = (String) target.getProperties().get("sts.projects");
+        if (!projects.isEmpty()) {
             for (String name : projects.split(",")) {
-                Project common = project.findProject(":" + name + "-common");
-
-                Project fabric = project.findProject(":" + name + "-fabric");
-                Project forge = project.findProject(":" + name + "-forge");
+                Project common = target.findProject(":" + name + "-common");
+                if (common != null)
+                    new Common().apply(common);
+                Project fabric = target.findProject(":" + name + "-fabric");
+                if (fabric != null)
+                    new Fabric().apply(fabric);
+                Project forge = target.findProject(":" + name + "-forge");
+                if (forge != null) {
+                    new Forge().apply(forge);
+                }
+                Project quilt = target.findProject(":" + name + "-quilt");
+                if (quilt != null) {
+                    new Quilt().apply(quilt);
+                }
+                Project neoforge = target.findProject(":" + name + "-neoforge");
+                if (neoforge != null) {
+                    new NeoForge().apply(neoforge);
+                }
             }
+        }
+
+        target.afterEvaluate(project -> {
+            init(acl, project);
+            ArchitectPluginExtension architectPluginExtension = project.getExtensions().getByType(ArchitectPluginExtension.class);
+            architectPluginExtension.setMinecraft(acl.getMcversion());
+            project.getPluginManager().apply(AllProjects.class);
+            project.getPluginManager().apply(SubProjects.class);
         });
 //        SourceSetContainer sourceSets = target.getExtensions().getByType(SourceSetContainer.class);
 //        Project common = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("common")).toList().get(0);
@@ -67,7 +92,7 @@ public class Main implements Plugin<Project> {
 
     private static void init(AclExtensions acl, Project project) {
         if (acl.getMcversion() == null) {
-            if (project.getProperties().containsKey("acl.mcversion")) 
+            if (project.getProperties().containsKey("acl.mcversion"))
                 acl.setMcversion(String.valueOf(project.getProperties().get("acl.mcversion")));
 
             else

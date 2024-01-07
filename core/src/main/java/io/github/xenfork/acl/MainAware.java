@@ -1,5 +1,6 @@
 package io.github.xenfork.acl;
 
+import dev.architectury.plugin.ArchitecturyPlugin;
 import io.github.xenfork.acl.projects.Main;
 import io.github.xenfork.acl.settings.MainSettings;
 import org.gradle.api.Plugin;
@@ -17,20 +18,7 @@ public class MainAware implements Plugin<PluginAware> {
        if (target instanceof Settings settings) {
            new MainSettings().apply(settings);
        } else if (target instanceof Project project) {
-           project.getLogger().info("load project" + project.getName());
-           apply(
-                   project.getPlugins(),
-                   "java",
-                   "maven-publish"
-           );
            new Main().apply(project);
-
        }
-    }
-
-    public static void apply(PluginContainer plugins, String... strings) {
-        for (String string : strings) {
-            plugins.apply(string);
-        }
     }
 }

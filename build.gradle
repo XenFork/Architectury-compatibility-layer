@@ -6,3 +6,14 @@ acl {
     mcversion="1.19.2"
     group = "io.github.xenfork"
 }
+
+allprojects {
+    repositories {
+        maven {
+            url "https://maven.architectury.dev/"
+        }
+        maven {
+            url "https://maven.fabricmc.net/"
+        }
+    }
+}
