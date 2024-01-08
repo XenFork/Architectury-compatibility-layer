@@ -2,6 +2,7 @@ package io.github.xenfork.acl.projects;
 
 import dev.architectury.plugin.ArchitectPluginExtension;
 import dev.architectury.plugin.ArchitecturyPlugin;
+import dev.architectury.plugin.ArchitecturyPluginExtensionKt;
 import io.github.xenfork.acl.mappings.Mojang;
 import io.github.xenfork.acl.mappings.Type;
 import io.github.xenfork.acl.mappings.Yarn;
@@ -15,41 +16,60 @@ public class Main implements Plugin<Project> {
         System.out.println("Hello world!");
     }
     public static AclExtensions acl;
+
     @Override
     public void apply(@NotNull Project target) {
-        target.getPlugins().apply(ArchitecturyPlugin.class);
         acl = target.getExtensions().create("acl", AclExtensions.class);
-        String projects = (String) target.getProperties().get("sts.projects");
-        if (!projects.isEmpty()) {
-            for (String name : projects.split(",")) {
-                Project common = target.findProject(":" + name + "-common");
-                if (common != null)
-                    new Common().apply(common);
-                Project fabric = target.findProject(":" + name + "-fabric");
-                if (fabric != null)
-                    new Fabric().apply(fabric);
-                Project forge = target.findProject(":" + name + "-forge");
-                if (forge != null) {
-                    new Forge().apply(forge);
-                }
-                Project quilt = target.findProject(":" + name + "-quilt");
-                if (quilt != null) {
-                    new Quilt().apply(quilt);
-                }
-                Project neoforge = target.findProject(":" + name + "-neoforge");
-                if (neoforge != null) {
-                    new NeoForge().apply(neoforge);
-                }
-            }
-        }
+        target.getPlugins().apply(AllProjects.class);
+        target.getPlugins().apply("architectury-plugin");
 
+        findProject(target);
         target.afterEvaluate(project -> {
             init(acl, project);
-            ArchitectPluginExtension architectPluginExtension = project.getExtensions().getByType(ArchitectPluginExtension.class);
-            architectPluginExtension.setMinecraft(acl.getMcversion());
-            project.getPluginManager().apply(AllProjects.class);
-            project.getPluginManager().apply(SubProjects.class);
+
+//            if (architectury instanceof ArchitectPluginExtension extension) {
+//                extension.setMinecraft(acl.getMcversion());
+//            }
+//            System.out.println(architectury.getClass());
+////            architectury.setMinecraft(acl.getMcversion());
         });
+//        target.apply(action -> {
+//            action.plugin(ArchitecturyPlugin.class);
+//        });
+
+//        target.getPluginManager().apply(AllProjects.class);
+//        target.getPluginManager().apply(SubProjects.class);
+//        acl = target.getExtensions().create("acl", AclExtensions.class);
+//        String projects = (String) target.getProperties().get("sts.projects");
+//        if (!projects.isEmpty()) {
+//            for (String name : projects.split(",")) {
+//                Project common = target.findProject(":" + name + "-common");
+//                if (common != null)
+//                    new Common().apply(common);
+//                Project fabric = target.findProject(":" + name + "-fabric");
+//                if (fabric != null)
+//                    new Fabric().apply(fabric);
+//                Project forge = target.findProject(":" + name + "-forge");
+//                if (forge != null) {
+//                    new Forge().apply(forge);
+//                }
+//                Project quilt = target.findProject(":" + name + "-quilt");
+//                if (quilt != null) {
+//                    new Quilt().apply(quilt);
+//                }
+//                Project neoforge = target.findProject(":" + name + "-neoforge");
+//                if (neoforge != null) {
+//                    new NeoForge().apply(neoforge);
+//                }
+//            }
+//        }
+//
+//        target.afterEvaluate(project -> {
+//            init(acl, project);
+//            ArchitectPluginExtension architectPluginExtension = (ArchitectPluginExtension) project.getExtensions().getByName("loom");
+//            architectPluginExtension.setMinecraft(acl.getMcversion());
+//
+//        });
 //        SourceSetContainer sourceSets = target.getExtensions().getByType(SourceSetContainer.class);
 //        Project common = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("common")).toList().get(0);
 //        Project fabric = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("fabric")).toList().get(0);
@@ -88,6 +108,32 @@ public class Main implements Plugin<Project> {
 //
 //
 //        });
+    }
+
+    public static void findProject(Project target) {
+        String projects = (String) target.getProperties().get("sts.projects");
+        if (!projects.isEmpty()) {
+            for (String name : projects.split(",")) {
+                Project common = target.findProject(":" + name + "-common");
+                if (common != null)
+                    new Common().apply(common);
+                Project fabric = target.findProject(":" + name + "-fabric");
+                if (fabric != null)
+                    new Fabric().apply(fabric);
+                Project forge = target.findProject(":" + name + "-forge");
+                if (forge != null) {
+                    new Forge().apply(forge);
+                }
+                Project quilt = target.findProject(":" + name + "-quilt");
+                if (quilt != null) {
+                    new Quilt().apply(quilt);
+                }
+                Project neoforge = target.findProject(":" + name + "-neoforge");
+                if (neoforge != null) {
+                    new NeoForge().apply(neoforge);
+                }
+            }
+        }
     }
 
     private static void init(AclExtensions acl, Project project) {

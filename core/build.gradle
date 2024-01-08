@@ -56,7 +56,7 @@ dependencies {
 //    shadow('com.electronwill.night-config:toml:3.6.6')
 //
 //    shadow("me.shedaniel:forgified-fabric-loom:0.5.16")
-//    shadow('org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.21')
+    shadow('org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.21')
     shadow("architectury-plugin:architectury-plugin.gradle.plugin:3.4-SNAPSHOT")
 
     shadow("com.github.johnrengelman:shadow:8.1.1")

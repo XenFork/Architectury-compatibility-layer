@@ -24,7 +24,6 @@ public class MainSettings implements Plugin<Settings> {
         } catch (IOException ignored) {}
 
         if (sts.projects != null && !sts.projects.isEmpty()) {
-            System.out.println("test");
             for (String project : sts.getProjects().split(",")) {
                 String common = project + "-common";
                 target.project(":" + common).setProjectDir(target.getRootProject().getProjectDir().toPath().resolve(project + "/common").toFile());

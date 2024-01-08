@@ -18,18 +18,21 @@ public class SubProjects implements Plugin<Project> {
     @Override
     public void apply(@NotNull Project target) {
         target.subprojects(action -> {
-            loomGradlePluginBootstrap = action.getPlugins().apply(LoomGradlePluginBootstrap.class);
-            LoomGradleExtensionImpl loom = action.getExtensions().getByType(LoomGradleExtensionImpl.class);
-            loom.silentMojangMappingsLicense();
-            DependencyHandler dependencies = action.getDependencies();
-            dependencies.add("minecraft",  "com.mojang:minecraft:" + Main.acl.getMcversion());
-            if (Main.acl.getMappings() instanceof Mojang) {
-                if (AclExtensions.srg_out.isEmpty()) {
-                    dependencies.add("mappings", loom.layered(LayeredMappingSpecBuilder::officialMojangMappings));
-                } {
-                    dependencies.add("mappings", loom.layered(layered -> layered.parchment(AclExtensions.srg_out)));
+            action.afterEvaluate(project -> {
+                loomGradlePluginBootstrap = project.getPlugins().apply(LoomGradlePluginBootstrap.class);
+                LoomGradleExtensionImpl loom = project.getExtensions().getByType(LoomGradleExtensionImpl.class);
+
+                loom.silentMojangMappingsLicense();
+                DependencyHandler dependencies = project.getDependencies();
+                dependencies.add("minecraft",  "com.mojang:minecraft:" + Main.acl.getMcversion());
+                if (Main.acl.getMappings() instanceof Mojang) {
+                    if (AclExtensions.srg_out.isEmpty()) {
+                        dependencies.add("mappings", loom.layered(LayeredMappingSpecBuilder::officialMojangMappings));
+                    } {
+                        dependencies.add("mappings", loom.layered(layered -> layered.parchment(AclExtensions.srg_out)));
+                    }
                 }
-            }
+            });
         });
     }
 }

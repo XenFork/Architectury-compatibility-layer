@@ -13,34 +13,39 @@ import org.gradle.api.tasks.TaskCollection;
 import org.gradle.api.tasks.compile.CompileOptions;
 import org.gradle.api.tasks.compile.JavaCompile;
 
+import static io.github.xenfork.acl.projects.Main.acl;
+
 public class AllProjects implements Plugin<Project> {
-    public static ArchitecturyPlugin architecturyPlugin;
-    public static JavaPlugin javaPlugin;
-    public static MavenPublishPlugin mavenPublishPlugin;
-    public static ShadowPlugin shadowPlugin;
     @Override
     public void apply(Project target) {
 
         target.allprojects(action -> {
-            action.getLogger().lifecycle("load project" + action.getName());
+            action.getLogger().lifecycle("load project " + action.getName());
             PluginContainer plugins = action.getPlugins();
-            javaPlugin = plugins.apply(JavaPlugin.class);
-            mavenPublishPlugin = plugins.apply(MavenPublishPlugin.class);
-            architecturyPlugin = plugins.apply(ArchitecturyPlugin.class);
-            shadowPlugin = plugins.apply(ShadowPlugin.class);
+            plugins.apply("java");
+            plugins.apply("maven-publish");
+
+            plugins.apply("architectury-plugin");
+            plugins.apply("com.github.johnrengelman.shadow");
             RepositoryHandler repositories = action.getRepositories();
             repositories.maven(mvn -> {
                 mvn.setUrl("https://maven.parchmentmc.org");
                 mvn.setName("ParchmentMc Mapping");
             });
-            TaskCollection<JavaCompile> javaCompiles = action.getTasks().withType(JavaCompile.class);
-            javaCompiles.configureEach(it -> {
-                CompileOptions options = it.getOptions();
-                options.setEncoding("UTF-8");
-                options.getRelease().set(17);
+
+            action.afterEvaluate(project -> {
+                project.setGroup(acl.getGroup());
+                project.getExtensions().getExtraProperties().set("archivesBaseName", project.getName().split("-")[0]);
+                TaskCollection<JavaCompile> javaCompiles = project.getTasks().withType(JavaCompile.class);
+                javaCompiles.configureEach(it -> {
+                    CompileOptions options = it.getOptions();
+                    options.setEncoding("UTF-8");
+                    options.getRelease().set(17);
+                });
+                var javaPluginExtension = project.getExtensions().getByName("java");
+                System.out.println(javaPluginExtension.getClass());
+//                javaPluginExtension.withSourcesJar();
             });
-            JavaPluginExtension javaPluginExtension = action.getExtensions().getByType(JavaPluginExtension.class);
-            javaPluginExtension.withSourcesJar();
         });
     }
 }
