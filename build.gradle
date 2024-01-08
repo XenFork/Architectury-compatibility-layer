@@ -10,9 +10,12 @@ acl {
     group = "io.github.xenfork"
 }
 
-architectury {
-    minecraft = acl.mcversion
-}
+architectury.minecraft = acl.mcversion
+println architectury.minecraft
+
+//architectury {
+//    minecraft = acl.mcversion
+//}
 
 
 allprojects {

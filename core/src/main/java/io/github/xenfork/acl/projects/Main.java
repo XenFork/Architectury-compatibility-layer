@@ -1,8 +1,6 @@
 package io.github.xenfork.acl.projects;
 
 import dev.architectury.plugin.ArchitectPluginExtension;
-import dev.architectury.plugin.ArchitecturyPlugin;
-import dev.architectury.plugin.ArchitecturyPluginExtensionKt;
 import io.github.xenfork.acl.mappings.Mojang;
 import io.github.xenfork.acl.mappings.Type;
 import io.github.xenfork.acl.mappings.Yarn;
