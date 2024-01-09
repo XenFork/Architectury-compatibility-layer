@@ -158,15 +158,22 @@ public class Main implements Plugin<Project> {
                 throw new RuntimeException("don't set fabric loader version, can use acl.flv=\"flv_version\"");
         }
         if (acl.getProject$name() == null) {
-            acl.setProject$name(project.getName());
+            if (project.getProperties().containsKey("archives_base_name")) {
+                acl.setProject$name(String.valueOf(project.getProperties().get("archives_base_name")));
+            } else {
+                acl.setProject$name(project.getName());
+            }
         }
         if (acl.getGroup() == null) {
-            acl.setGroup("io.github.xenfork");
+            if (project.getProperties().containsKey("acl.group")) {
+                acl.setGroup(String.valueOf(project.getProperties().get("acl.group")));
+            } else {
+                acl.setGroup("io.github.xenfork");
+            }
         }
         Type mappings = acl.getMappings();
         String srg = acl.getSrg();
         if (mappings instanceof Mojang) {
-
             if (!srg.isEmpty()) {
                 if (srg.contains(":")) {
                     AclExtensions.srg_out = "org.parchmentmc.data:parchment-%s@zip".formatted(srg);

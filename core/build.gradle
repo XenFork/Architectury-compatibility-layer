@@ -112,6 +112,9 @@ java {
 publishing {
     repositories {
         mavenLocal()
+        maven {
+            url rootProject.file("rootmaven")
+        }
     }
     publications {
         mavenJava(MavenPublication) {
