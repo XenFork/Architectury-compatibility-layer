@@ -6,7 +6,10 @@ import net.fabricmc.loom.bootstrap.LoomGradlePluginBootstrap;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
+import org.gradle.api.plugins.ExtraPropertiesExtension;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class SubProjects implements Plugin<Project> {
 
@@ -14,6 +17,15 @@ public class SubProjects implements Plugin<Project> {
     public void apply(@NotNull Project target) {
         target.subprojects(action -> {
             action.getPlugins().apply(LoomGradlePluginBootstrap.class);
+            String name = target.getName();
+            String[] split = name.split("-", 2);
+            target.setBuildDir(target.getRootProject().getBuildDir().toPath().resolve(split[0]).resolve(split[1]).toFile());
+            ExtraPropertiesExtension extraProperties = target.getExtensions().getExtraProperties();
+            String name1 = split[0] + "_version";
+            if (extraProperties.has(name1))
+                target.setVersion(Objects.requireNonNull(extraProperties.get(name1)));
+            else
+                target.setVersion("1.0.0.0");
             action.afterEvaluate(project -> {
                 LoomGradleExtensionAPI loom = project.getExtensions().getByType(LoomGradleExtensionAPI.class);
 

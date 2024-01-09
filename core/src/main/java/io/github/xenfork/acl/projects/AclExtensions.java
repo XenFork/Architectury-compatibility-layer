@@ -3,7 +3,7 @@ package io.github.xenfork.acl.projects;
 import io.github.xenfork.acl.mappings.Type;
 
 public class AclExtensions {
-    private String mcversion, group, project$name, srg;
+    private String mcversion, group, project$name, srg, flv;
     public static String srg_out = "";
     public Type mappings;
 
@@ -25,6 +25,14 @@ public class AclExtensions {
 
     public String getProject$name() {
         return project$name;
+    }
+
+    public void setFlv(String flv) {
+        this.flv = flv;
+    }
+
+    public String getFlv() {
+        return flv;
     }
 
     public void setProject$name(String project$name) {

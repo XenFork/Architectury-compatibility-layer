@@ -148,7 +148,14 @@ public class Main implements Plugin<Project> {
                 acl.setMcversion(String.valueOf(project.getProperties().get("acl.mcversion")));
 
             else
-                throw new RuntimeException("don't set minecraft version");
+                throw new RuntimeException("don't set minecraft version, can use acl.mcversion=\"1.20.1\" or other version");
+        }
+        if (acl.getFlv() == null) {
+            if (project.getProperties().containsKey("acl.flv")) {
+                acl.setFlv(String.valueOf(project.getProperties().get("acl.flv")));
+            }
+            else
+                throw new RuntimeException("don't set fabric loader version, can use acl.flv=\"flv_version\"");
         }
         if (acl.getProject$name() == null) {
             acl.setProject$name(project.getName());
