@@ -9,10 +9,6 @@ pluginManagement {
     }
 }
 
-plugins {
-    id "acl" version "$acl_test_version"
-}
-
 rootProject.name = 'acl'
 
 include("core")

@@ -26,18 +26,22 @@ public class MainSettings implements Plugin<Settings> {
         if (sts.projects != null && !sts.projects.isEmpty()) {
             for (String project : sts.getProjects().split(",")) {
                 String common = project + "-common";
+                target.include(common);
                 target.project(":" + common).setProjectDir(target.getRootProject().getProjectDir().toPath().resolve(project + "/common").toFile());
                 if (sts.platform == null) {
                     String fabric = project + "-fabric";
                     String forge = project + "-forge";
-                    target.include(common, fabric, forge);
+                    target.include(fabric, forge);
                     target.project(":" + fabric).setProjectDir(target.getRootProject().getProjectDir().toPath().resolve(project + "/fabric").toFile());
                     target.project(":" + forge).setProjectDir(target.getRootProject().getProjectDir().toPath().resolve(project + "/forge").toFile());
                 } else {
                     for (String platform : sts.platform.split(",")) {
-                        target.project(":" + project + "-" + platform).setProjectDir(target.getRootProject().getProjectDir().toPath().resolve(project + "/" + platform).toFile());
+                        String path = project + "-" + platform;
+                        target.include(path);
+                        target.project(":" + path).setProjectDir(target.getRootProject().getProjectDir().toPath().resolve(project + "/" + platform).toFile());
                     }
                 }
+
 
 //                target.include(project + "/common", project + "/fabric", project + "/forge");
             }

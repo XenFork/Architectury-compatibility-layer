@@ -1,6 +1,10 @@
 package io.github.xenfork.acl.projects;
 
+import cn.hutool.core.io.FileUtil;
+import com.google.common.io.Resources;
 import dev.architectury.plugin.ArchitectPluginExtension;
+import dev.architectury.plugin.ArchitecturyPlugin;
+import dev.architectury.plugin.ArchitecturyPluginExtensionKt;
 import io.github.xenfork.acl.mappings.Mojang;
 import io.github.xenfork.acl.mappings.Type;
 import io.github.xenfork.acl.mappings.Yarn;
@@ -8,6 +12,8 @@ import io.github.xenfork.acl.projects.sub.*;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.*;
 
 public class Main implements Plugin<Project> {
     public static void main(String[] args) {
@@ -18,12 +24,14 @@ public class Main implements Plugin<Project> {
     @Override
     public void apply(@NotNull Project target) {
         acl = target.getExtensions().create("acl", AclExtensions.class);
+        target.getPlugins().apply(ArchitecturyPlugin.class);
         target.getPlugins().apply(AllProjects.class);
-        target.getPlugins().apply("architectury-plugin");
-
+        target.getPlugins().apply(SubProjects.class);
         findProject(target);
         target.afterEvaluate(project -> {
             init(acl, project);
+            ArchitectPluginExtension architectury = project.getExtensions().getByType(ArchitectPluginExtension.class);
+            architectury.setMinecraft(acl.getMcversion());
 
 //            if (architectury instanceof ArchitectPluginExtension extension) {
 //                extension.setMinecraft(acl.getMcversion());

@@ -2,21 +2,8 @@ plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
     id "dev.architectury.loom" version "1.4-SNAPSHOT" apply false
     id "com.github.johnrengelman.shadow" version "8.1.1" apply false
-    id "acl" version "$acl_test_version"
+//    id "acl" version "$acl_test_version"
 }
-
-acl {
-    mcversion="1.19.2"
-    group = "io.github.xenfork"
-}
-
-architectury.minecraft = acl.mcversion
-println architectury.minecraft
-
-//architectury {
-//    minecraft = acl.mcversion
-//}
-
 
 allprojects {
     repositories {

@@ -1,0 +1,3 @@
+architectury {
+    minecraft = acl.mcversion
+}
