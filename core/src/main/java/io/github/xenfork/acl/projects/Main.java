@@ -28,52 +28,14 @@ public class Main implements Plugin<Project> {
         target.getPlugins().apply(ArchitecturyPlugin.class);
         System.out.println(MainSettings.acl.getSrg());
         System.out.println(MainSettings.acl.getMcversion());
-        init(acl, target);
+        init(MainSettings.acl, target);
         ArchitectPluginExtension architectury = target.getExtensions().getByType(ArchitectPluginExtension.class);
         architectury.setMinecraft(MainSettings.acl.getMcversion());
-
         target.getPlugins().apply(AllProjects.class);
         target.getPlugins().apply(SubProjects.class);
 
-
         findProject(target);
-//        target.apply(action -> {
-//            action.plugin(ArchitecturyPlugin.class);
-//        });
 
-//        target.getPluginManager().apply(AllProjects.class);
-//        target.getPluginManager().apply(SubProjects.class);
-//        acl = target.getExtensions().create("acl", AclExtensions.class);
-//        String projects = (String) target.getProperties().get("sts.projects");
-//        if (!projects.isEmpty()) {
-//            for (String name : projects.split(",")) {
-//                Project common = target.findProject(":" + name + "-common");
-//                if (common != null)
-//                    new Common().apply(common);
-//                Project fabric = target.findProject(":" + name + "-fabric");
-//                if (fabric != null)
-//                    new Fabric().apply(fabric);
-//                Project forge = target.findProject(":" + name + "-forge");
-//                if (forge != null) {
-//                    new Forge().apply(forge);
-//                }
-//                Project quilt = target.findProject(":" + name + "-quilt");
-//                if (quilt != null) {
-//                    new Quilt().apply(quilt);
-//                }
-//                Project neoforge = target.findProject(":" + name + "-neoforge");
-//                if (neoforge != null) {
-//                    new NeoForge().apply(neoforge);
-//                }
-//            }
-//        }
-//
-//        target.afterEvaluate(project -> {
-//            init(acl, project);
-//            ArchitectPluginExtension architectPluginExtension = (ArchitectPluginExtension) project.getExtensions().getByName("loom");
-//            architectPluginExtension.setMinecraft(acl.getMcversion());
-//
-//        });
 //        SourceSetContainer sourceSets = target.getExtensions().getByType(SourceSetContainer.class);
 //        Project common = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("common")).toList().get(0);
 //        Project fabric = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("fabric")).toList().get(0);
@@ -141,42 +103,26 @@ public class Main implements Plugin<Project> {
     }
 
     private static void init(AclExtensions acl, Project project) {
-        if (acl.getMcversion() == null) {
-            if (project.getProperties().containsKey("acl.mcversion"))
-                acl.setMcversion(String.valueOf(project.getProperties().get("acl.mcversion")));
-
-            else
-                throw new RuntimeException("don't set minecraft version, can use acl.mcversion=\"1.20.1\" or other version");
+        if (MainSettings.acl.getMcversion() == null) {
+            throw new RuntimeException("don't set minecraft version, can use acl.mcversion=\"1.20.1\" or other version");
         }
-        if (acl.getFlv() == null) {
-            if (project.getProperties().containsKey("acl.flv")) {
-                acl.setFlv(String.valueOf(project.getProperties().get("acl.flv")));
-            }
-            else
-                throw new RuntimeException("don't set fabric loader version, can use acl.flv=\"flv_version\"");
+        if (MainSettings.acl.getFlv() == null) {
+            throw new RuntimeException("don't set fabric loader version, can use acl.flv=\"flv_version\"");
         }
-        if (acl.getProject$name() == null) {
-            if (project.getProperties().containsKey("archives_base_name")) {
-                acl.setProject$name(String.valueOf(project.getProperties().get("archives_base_name")));
-            } else {
-                acl.setProject$name(project.getName());
-            }
+        if (MainSettings.acl.getProject$name() == null) {
+            MainSettings.acl.setProject$name(project.getName());
         }
-        if (acl.getGroup() == null) {
-            if (project.getProperties().containsKey("acl.group")) {
-                acl.setGroup(String.valueOf(project.getProperties().get("acl.group")));
-            } else {
-                acl.setGroup("io.github.xenfork");
-            }
+        if (MainSettings.acl.getGroup() == null) {
+            MainSettings.acl.setGroup("io.github.xenfork");
         }
-        Type mappings = acl.getMappings();
-        String srg = acl.getSrg();
+        Type mappings = MainSettings.acl.getMappings();
+        String srg = MainSettings.acl.getSrg();
         if (mappings instanceof Mojang) {
             if (!srg.isEmpty()) {
                 if (srg.contains(":")) {
-                    AclExtensions.srg_out = "org.parchmentmc.data:parchment-%s@zip".formatted(srg);
+                    MainSettings.acl.srg_out = "org.parchmentmc.data:parchment-%s@zip".formatted(srg);
                 } else {
-                    AclExtensions.srg_out = "org.parchmentmc.data.parchment-%s:%s@zip".formatted(acl.getMcversion(), srg);
+                    MainSettings.acl.srg_out = "org.parchmentmc.data:parchment-" + MainSettings.acl.getMcversion() + ":" + srg + "@zip";
                 }
             }
         }
@@ -186,9 +132,9 @@ public class Main implements Plugin<Project> {
             }
             if (srg.contains(":")) {
                 String[] split = srg.split(":", 2);
-                AclExtensions.srg_out = "net.fabricmc:yarn:%s+build.%s".formatted(split[0], split[1]);
+                MainSettings.acl.srg_out = "net.fabricmc:yarn:%s+build.%s".formatted(split[0], split[1]);
             } else {
-                AclExtensions.srg_out = "net.fabricmc:yarn:%s+build.%s".formatted(acl.getMcversion(), srg);
+                MainSettings.acl.srg_out = "net.fabricmc:yarn:%s+build.%s".formatted(acl.getMcversion(), srg);
             }
         }
     }

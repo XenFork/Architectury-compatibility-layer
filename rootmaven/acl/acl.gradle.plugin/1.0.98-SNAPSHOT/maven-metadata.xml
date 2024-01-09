@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>acl</groupId>
+  <artifactId>acl.gradle.plugin</artifactId>
+  <versioning>
+    <lastUpdated>20240109170359</lastUpdated>
+    <snapshot>
+      <timestamp>20240109.170359</timestamp>
+      <buildNumber>2</buildNumber>
+    </snapshot>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>1.0.98-20240109.170359-2</value>
+        <updated>20240109170359</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+  <version>1.0.98-SNAPSHOT</version>
+</metadata>

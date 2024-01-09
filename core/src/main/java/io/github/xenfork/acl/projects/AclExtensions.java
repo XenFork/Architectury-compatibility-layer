@@ -4,7 +4,7 @@ import io.github.xenfork.acl.mappings.Type;
 
 public class AclExtensions {
     private String mcversion, group, project$name, srg, flv;
-    public static String srg_out = "";
+    public String srg_out = "";
     public Type mappings;
 
     public String getGroup() {

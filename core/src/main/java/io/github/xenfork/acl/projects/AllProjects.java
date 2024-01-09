@@ -2,6 +2,7 @@ package io.github.xenfork.acl.projects;
 
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin;
 import dev.architectury.plugin.ArchitecturyPlugin;
+import io.github.xenfork.acl.settings.MainSettings;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -33,19 +34,16 @@ public class AllProjects implements Plugin<Project> {
                 mvn.setUrl("https://maven.parchmentmc.org");
                 mvn.setName("ParchmentMc Mapping");
             });
-
-            action.afterEvaluate(project -> {
-                project.setGroup(acl.getGroup());
-                project.getExtensions().getExtraProperties().set("archivesBaseName", project.getName().split("-")[0]);
-                TaskCollection<JavaCompile> javaCompiles = project.getTasks().withType(JavaCompile.class);
-                javaCompiles.configureEach(it -> {
-                    CompileOptions options = it.getOptions();
-                    options.setEncoding("UTF-8");
-                    options.getRelease().set(17);
-                });
-                JavaPluginExtension javaPluginExtension = project.getExtensions().getByType(JavaPluginExtension.class);
-                javaPluginExtension.withSourcesJar();
+            target.setGroup(MainSettings.acl.getGroup());
+            target.getExtensions().getExtraProperties().set("archivesBaseName", target.getName().split("-")[0]);
+            TaskCollection<JavaCompile> javac = target.getTasks().withType(JavaCompile.class);
+            javac.configureEach(it -> {
+                CompileOptions options = it.getOptions();
+                options.setEncoding("UTF-8");
+                options.getRelease().set(17);
             });
+            JavaPluginExtension java = target.getExtensions().getByType(JavaPluginExtension.class);
+            java.withSourcesJar();
         });
     }
 }

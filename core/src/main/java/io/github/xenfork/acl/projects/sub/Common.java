@@ -13,9 +13,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-public class Common implements Plugin<Project> {
+public class Common extends Basic {
     @Override
     public void apply(@NotNull Project target) {
+        super.apply(target);
 //        target.afterEvaluate(project -> {
 //            SourceSetContainer sourceSets = project.getExtensions().getByType(SourceSetContainer.class);
 //            SourceDirectorySet main = sourceSets.getByName("main").getResources();

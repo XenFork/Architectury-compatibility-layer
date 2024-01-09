@@ -3,6 +3,7 @@ package io.github.xenfork.acl;
 import dev.architectury.plugin.ArchitecturyPlugin;
 import io.github.xenfork.acl.projects.Main;
 import io.github.xenfork.acl.settings.MainSettings;
+import net.fabricmc.loom.bootstrap.LoomGradlePluginBootstrap;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.initialization.Settings;
