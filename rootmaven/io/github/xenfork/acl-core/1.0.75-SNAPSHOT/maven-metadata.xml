@@ -3,32 +3,32 @@
   <groupId>io.github.xenfork</groupId>
   <artifactId>acl-core</artifactId>
   <versioning>
-    <lastUpdated>20240109135506</lastUpdated>
+    <lastUpdated>20240109141924</lastUpdated>
     <snapshot>
-      <timestamp>20240109.135506</timestamp>
-      <buildNumber>2</buildNumber>
+      <timestamp>20240109.141924</timestamp>
+      <buildNumber>4</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
-        <extension>module</extension>
-        <value>1.0.75-20240109.135506-2</value>
-        <updated>20240109135506</updated>
+        <classifier>sources</classifier>
+        <extension>jar</extension>
+        <value>1.0.75-20240109.141924-4</value>
+        <updated>20240109141924</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>1.0.75-20240109.141924-4</value>
+        <updated>20240109141924</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>1.0.75-20240109.135506-2</value>
-        <updated>20240109135506</updated>
+        <value>1.0.75-20240109.141924-4</value>
+        <updated>20240109141924</updated>
       </snapshotVersion>
       <snapshotVersion>
-        <extension>jar</extension>
-        <value>1.0.75-20240109.135506-2</value>
-        <updated>20240109135506</updated>
-      </snapshotVersion>
-      <snapshotVersion>
-        <classifier>sources</classifier>
-        <extension>jar</extension>
-        <value>1.0.75-20240109.135506-2</value>
-        <updated>20240109135506</updated>
+        <extension>module</extension>
+        <value>1.0.75-20240109.141924-4</value>
+        <updated>20240109141924</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
