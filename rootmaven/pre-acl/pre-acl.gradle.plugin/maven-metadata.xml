@@ -3,10 +3,10 @@
   <groupId>pre-acl</groupId>
   <artifactId>pre-acl.gradle.plugin</artifactId>
   <versioning>
-    <latest>1.0.75-SNAPSHOT</latest>
+    <latest>1.0.88-SNAPSHOT</latest>
     <versions>
-      <version>1.0.75-SNAPSHOT</version>
+      <version>1.0.88-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20240109141925</lastUpdated>
+    <lastUpdated>20240109153947</lastUpdated>
   </versioning>
 </metadata>

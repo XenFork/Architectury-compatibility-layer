@@ -1,5 +1,6 @@
 package io.github.xenfork.acl.settings;
 
+import io.github.xenfork.acl.projects.AclExtensions;
 import org.gradle.api.Plugin;
 import org.gradle.api.initialization.Settings;
 import org.jetbrains.annotations.NotNull;
@@ -11,11 +12,12 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class MainSettings implements Plugin<Settings> {
-
+    public static AclExtensions acl;
     @Override
     public void apply(@NotNull Settings target) {
 
-        AclExtensions sts = target.getExtensions().create("sts", AclExtensions.class);
+        StsExtensions sts = target.getExtensions().create("sts", StsExtensions.class);
+        acl = target.getExtensions().create("acl", AclExtensions.class);
         Properties properties = new Properties();
         try {
             properties.load(new BufferedReader(new FileReader(new File(target.getRootProject().getProjectDir(), "gradle.properties"))));
@@ -42,8 +44,6 @@ public class MainSettings implements Plugin<Settings> {
                     }
                 }
 
-
-//                target.include(project + "/common", project + "/fabric", project + "/forge");
             }
         }
 

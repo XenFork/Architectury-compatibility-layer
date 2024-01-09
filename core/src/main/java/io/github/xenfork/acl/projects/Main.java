@@ -9,6 +9,7 @@ import io.github.xenfork.acl.mappings.Mojang;
 import io.github.xenfork.acl.mappings.Type;
 import io.github.xenfork.acl.mappings.Yarn;
 import io.github.xenfork.acl.projects.sub.*;
+import io.github.xenfork.acl.settings.MainSettings;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.jetbrains.annotations.NotNull;
@@ -25,20 +26,17 @@ public class Main implements Plugin<Project> {
     public void apply(@NotNull Project target) {
         acl = target.getExtensions().create("acl", AclExtensions.class);
         target.getPlugins().apply(ArchitecturyPlugin.class);
+        System.out.println(MainSettings.acl.getSrg());
+        System.out.println(MainSettings.acl.getMcversion());
+        init(acl, target);
+        ArchitectPluginExtension architectury = target.getExtensions().getByType(ArchitectPluginExtension.class);
+        architectury.setMinecraft(MainSettings.acl.getMcversion());
+
         target.getPlugins().apply(AllProjects.class);
         target.getPlugins().apply(SubProjects.class);
-        findProject(target);
-        target.afterEvaluate(project -> {
-            init(acl, project);
-            ArchitectPluginExtension architectury = project.getExtensions().getByType(ArchitectPluginExtension.class);
-            architectury.setMinecraft(acl.getMcversion());
 
-//            if (architectury instanceof ArchitectPluginExtension extension) {
-//                extension.setMinecraft(acl.getMcversion());
-//            }
-//            System.out.println(architectury.getClass());
-////            architectury.setMinecraft(acl.getMcversion());
-        });
+
+        findProject(target);
 //        target.apply(action -> {
 //            action.plugin(ArchitecturyPlugin.class);
 //        });
