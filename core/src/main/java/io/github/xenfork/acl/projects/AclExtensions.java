@@ -3,7 +3,7 @@ package io.github.xenfork.acl.projects;
 import io.github.xenfork.acl.mappings.Type;
 
 public class AclExtensions {
-    private String mcversion, group, project$name, srg, flv;
+    private String mcversion, group, project$name, srg, flv, architectury$version, fapi;
     public String srg_out = "";
     public Type mappings;
 
@@ -62,5 +62,23 @@ public class AclExtensions {
         if (srg == null)
             srg = "";
         return srg;
+    }
+
+    public String getArchitectury$version() {
+        if (architectury$version == null) architectury$version = "";
+        return architectury$version;
+    }
+
+    public void setArchitectury$version(String architectury$version) {
+        this.architectury$version = architectury$version;
+    }
+
+    public String getFapi() {
+        if (fapi == null) fapi = "";
+        return fapi;
+    }
+
+    public void setFapi(String fapi) {
+        this.fapi = fapi;
     }
 }
