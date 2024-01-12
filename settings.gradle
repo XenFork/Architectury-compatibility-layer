@@ -11,6 +11,6 @@ pluginManagement {
 
 rootProject.name = 'acl'
 
-include("core")
-project(":core").name="acl-core"
+//include("core")
+//project(":core").name="acl-core"
 
