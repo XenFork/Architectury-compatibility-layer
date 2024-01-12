@@ -14,9 +14,11 @@ import java.io.File;
 import java.io.IOException;
 
 import static io.github.xenfork.acl.projects.SubProjects.loom;
+import static io.github.xenfork.acl.settings.MainSettings.acl;
 
 public class Basic implements Plugin<Project> {
     public String archivesBaseName, loader;
+    public DependencyHandler dependencies;
     @Override
     public void apply(@NotNull Project target) {
         archivesBaseName = target.getName().split("-")[0];
@@ -35,5 +37,25 @@ public class Basic implements Plugin<Project> {
         target.apply(act -> {
             act.from(file.getAbsolutePath());
         });
+        dependencies = target.getDependencies();
+        flvDepends();
+        architecturyDepends();
+    }
+
+    private void architecturyDepends() {
+        if (loader.equals("common")) {
+            dependencies.add("modApi", "dev.architectury:architectury:" + acl.getArchitectury$version());
+        } else {
+            dependencies.add("modApi", "dev.architectury:architectury-" + loader + ":" + acl.getArchitectury$version());
+        }
+    }
+
+    private void flvDepends() {
+        if (loader.equals("common") || loader.equals("fabric")) {
+            if (!acl.getFlv().isEmpty()) {
+                dependencies.add("modImplementation", "net.fabricmc:fabric-loader:" + acl.getFlv());
+            }
+        }
+
     }
 }

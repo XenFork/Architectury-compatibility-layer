@@ -3,7 +3,7 @@ package io.github.xenfork.acl.projects;
 import io.github.xenfork.acl.mappings.Type;
 
 public class AclExtensions {
-    private String mcversion, group, project$name, srg, flv, architectury$version, fapi;
+    private String mcversion, group, project$name, srg, flv, architectury$version, fapi, fgv;
     public String srg_out = "";
     public Type mappings;
 
@@ -80,5 +80,13 @@ public class AclExtensions {
 
     public void setFapi(String fapi) {
         this.fapi = fapi;
+    }
+
+    public String getFgv() {
+        return fgv;
+    }
+
+    public void setFgv(String fgv) {
+        this.fgv = fgv;
     }
 }

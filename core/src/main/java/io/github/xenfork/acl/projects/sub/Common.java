@@ -1,6 +1,7 @@
 package io.github.xenfork.acl.projects.sub;
 
 import io.github.xenfork.acl.projects.Main;
+import io.github.xenfork.acl.settings.MainSettings;
 import net.fabricmc.loom.LoomGradleExtension;
 import net.fabricmc.loom.api.LoomGradleExtensionAPI;
 import org.gradle.api.Plugin;
@@ -13,24 +14,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+import static io.github.xenfork.acl.settings.MainSettings.acl;
+
 public class Common extends Basic {
     @Override
     public void apply(@NotNull Project target) {
         super.apply(target);
-//        target.afterEvaluate(project -> {
-//            SourceSetContainer sourceSets = project.getExtensions().getByType(SourceSetContainer.class);
-//            SourceDirectorySet main = sourceSets.getByName("main").getResources();
-//            main.getSrcDirs().add(project.file("src/main/generated/resources"));
-//            main.exclude(".cache");
-//            ExtensionContainer extensions = project.getExtensions();
-//            LoomGradleExtensionAPI loom = extensions.getByType(LoomGradleExtensionAPI.class);
-//            File file = project.file("src/main/resources/" + extensions.getExtraProperties().get("archivesBaseName") + ".accesswidener");
-//            if (file.exists()) {
-//                loom.getAccessWidenerPath().set(file);
-//            }
-//            DependencyHandler dependencies = project.getDependencies();
-//            dependencies.add("modImplementation", "net.fabricmc:fabric-loader:" + Main.acl.getFlv());
-//
-//        });
+        DependencyHandler dependencies = target.getDependencies();
+
+        if (!acl.getArchitectury$version().isEmpty()) {
+
+        }
     }
 }

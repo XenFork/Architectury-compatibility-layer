@@ -3,11 +3,11 @@
   <groupId>io.github.xenfork</groupId>
   <artifactId>acl-core</artifactId>
   <versioning>
-    <latest>1.1.3-SNAPSHOT</latest>
+    <latest>1.1.5-SNAPSHOT</latest>
     <versions>
-      <version>1.1.2-SNAPSHOT</version>
-      <version>1.1.3-SNAPSHOT</version>
+      <version>1.1.4-SNAPSHOT</version>
+      <version>1.1.5-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20240111030412</lastUpdated>
+    <lastUpdated>20240112073503</lastUpdated>
   </versioning>
 </metadata>
