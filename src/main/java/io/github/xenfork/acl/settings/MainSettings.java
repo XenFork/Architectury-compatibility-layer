@@ -13,10 +13,10 @@ import java.util.Properties;
 
 public class MainSettings implements Plugin<Settings> {
     public static AclExtensions acl;
+    public static StsExtensions sts;
     @Override
     public void apply(@NotNull Settings target) {
-
-        StsExtensions sts = target.getExtensions().create("sts", StsExtensions.class);
+        sts = target.getExtensions().create("sts", StsExtensions.class);
         acl = target.getExtensions().create("acl", AclExtensions.class);
         Properties properties = new Properties();
         try {
