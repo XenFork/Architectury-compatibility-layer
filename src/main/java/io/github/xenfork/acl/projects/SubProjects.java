@@ -16,7 +16,9 @@ import java.util.Objects;
 public class SubProjects implements Plugin<Project> {
 
     public static LoomGradleExtensionAPI loom;
+    public static ExtraPropertiesExtension extraProperties;
 
+    @SuppressWarnings({"UnstableApiUsage", "deprecation"})
     @Override
     public void apply(@NotNull Project target) {
         target.subprojects(action -> {
@@ -24,7 +26,7 @@ public class SubProjects implements Plugin<Project> {
             String name = action.getName();
             String[] split = name.split("-", 2);
             action.setBuildDir(action.getRootProject().getBuildDir().toPath().resolve(split[0]).resolve(split[1]).toFile());
-            ExtraPropertiesExtension extraProperties = action.getExtensions().getExtraProperties();
+            extraProperties = action.getExtensions().getExtraProperties();
             String name1 = split[0] + "_version";
             if (extraProperties.has(name1))
                 action.setVersion(Objects.requireNonNull(extraProperties.get(name1)));

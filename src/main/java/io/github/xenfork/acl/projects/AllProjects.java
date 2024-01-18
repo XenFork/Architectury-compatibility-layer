@@ -19,6 +19,10 @@ import org.gradle.api.tasks.compile.JavaCompile;
 import static io.github.xenfork.acl.projects.Main.acl;
 
 public class AllProjects implements Plugin<Project> {
+
+    public static RepositoryHandler repositories;
+    public static TaskCollection<JavaCompile> javac;
+    public static JavaPluginExtension java;
     @Override
     public void apply(Project target) {
 
@@ -29,20 +33,20 @@ public class AllProjects implements Plugin<Project> {
             plugins.apply(MavenPublishPlugin.class);
             plugins.apply(ArchitecturyPlugin.class);
             plugins.apply(ShadowPlugin.class);
-            RepositoryHandler repositories = action.getRepositories();
+            repositories = action.getRepositories();
             repositories.maven(mvn -> {
                 mvn.setUrl("https://maven.parchmentmc.org");
                 mvn.setName("ParchmentMc Mapping");
             });
             target.setGroup(MainSettings.acl.getGroup());
             target.getExtensions().getExtraProperties().set("archivesBaseName", target.getName().split("-")[0]);
-            TaskCollection<JavaCompile> javac = target.getTasks().withType(JavaCompile.class);
+            javac = target.getTasks().withType(JavaCompile.class);
             javac.configureEach(it -> {
                 CompileOptions options = it.getOptions();
                 options.setEncoding("UTF-8");
                 options.getRelease().set(17);
             });
-            JavaPluginExtension java = target.getExtensions().getByType(JavaPluginExtension.class);
+            java = target.getExtensions().getByType(JavaPluginExtension.class);
             java.withSourcesJar();
         });
     }

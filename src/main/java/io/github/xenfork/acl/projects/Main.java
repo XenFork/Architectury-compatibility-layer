@@ -15,12 +15,15 @@ import org.gradle.api.Project;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main implements Plugin<Project> {
     public static void main(String[] args) {
         System.out.println("Hello world!");
     }
     public static AclExtensions acl;
+    public static ArchitectPluginExtension architectury;
 
     @Override
     public void apply(@NotNull Project target) {
@@ -29,77 +32,27 @@ public class Main implements Plugin<Project> {
         System.out.println(MainSettings.acl.getSrg());
         System.out.println(MainSettings.acl.getMcversion());
         init(MainSettings.acl, target);
-        ArchitectPluginExtension architectury = target.getExtensions().getByType(ArchitectPluginExtension.class);
+        architectury = target.getExtensions().getByType(ArchitectPluginExtension.class);
         architectury.setMinecraft(MainSettings.acl.getMcversion());
         target.getPlugins().apply(AllProjects.class);
         target.getPlugins().apply(SubProjects.class);
-
         findProject(target);
-
-//        SourceSetContainer sourceSets = target.getExtensions().getByType(SourceSetContainer.class);
-//        Project common = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("common")).toList().get(0);
-//        Project fabric = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("fabric")).toList().get(0);
-//        Project forge = target.getRootProject().getSubprojects().stream().filter(p -> p.getName().equals("forge")).toList().get(0);
-//        SourceSetContainer commonSourceSet = common.getExtensions().getByType(SourceSetContainer.class);
-//        SourceSetContainer fabricSourceSet = fabric.getExtensions().getByType(SourceSetContainer.class);
-//        SourceSetContainer forgeSourceSet = forge.getExtensions().getByType(SourceSetContainer.class);
-//        target.afterEvaluate(project -> {
-//            init(set, project);// init acl extensions
-//            File commonTagFile = FileUtils.getFile(project.getBuildFile(), "generated", "sources", "commonTags");
-//            File fabricTagFile = FileUtils.getFile(project.getBuildFile(), "generated", "sources", "fabricTags");
-//            File forgeTagFile = FileUtils.getFile(project.getBuildFile(), "generated", "sources", "forgeTags");
-//            TaskProvider<TagTask> genTags = project.getTasks().register("commonTags", TagTask.class, task -> {
-//                task.getOutputDir().set(commonTagFile);
-//            });
-//            TaskProvider<FabricTask> fabricTags = project.getTasks().register("fabricTags", FabricTask.class, task -> {
-//                task.getOutputDir().set(fabricTagFile);
-//            });
-//            TaskProvider<ForgeTask> forgeTags = project.getTasks().register("forgeTags", ForgeTask.class, task -> {
-//                task.getOutputDir().set(forgeTagFile);
-//            });
-//
-//            SourceSet tagsCommon = commonSourceSet.create("commonTags", sourceSet -> {
-//                sourceSet.getJava().setSrcDirs(project.files(commonTagFile).builtBy(genTags));
-//            });
-//            SourceSet tagsFabric = fabricSourceSet.create("fabricTags", sourceSet -> {
-//                sourceSet.getJava().setSrcDirs(project.files(fabricTagFile).builtBy(fabricTags));
-//            });
-//
-//            SourceSet tagsForge = forgeSourceSet.create("forgeTags", sourceSet -> {
-//                sourceSet.getJava().setSrcDirs(project.files(fabricTagFile).builtBy(forgeTags));
-//            });
-//            common.getTasks().named(tagsCommon.getCompileJavaTaskName()).configure(task -> task.dependsOn(genTags));
-//            fabric.getTasks().named(tagsFabric.getCompileJavaTaskName()).configure(task -> task.dependsOn(fabricTags));
-//            forge.getTasks().named(tagsForge.getCompileJavaTaskName()).configure(task -> task.dependsOn(forgeTags));
-//
-//
-//        });
     }
-
-    public static void findProject(Project target) {
+    public static void findProject(@NotNull Project target) {
         String projects = (String) target.getProperties().get("sts.projects");
         if (!projects.isEmpty()) {
             for (String name : projects.split(",")) {
-                Project common = target.findProject(":" + name + "-common");
-                if (common != null)
-                    new Common().apply(common);
-                Project fabric = target.findProject(":" + name + "-fabric");
-                if (fabric != null)
-                    new Fabric().apply(fabric);
-                Project forge = target.findProject(":" + name + "-forge");
-                if (forge != null) {
-                    new Forge().apply(forge);
-                }
-                Project quilt = target.findProject(":" + name + "-quilt");
-                if (quilt != null) {
-                    new Quilt().apply(quilt);
-                }
-                Project neoforge = target.findProject(":" + name + "-neoforge");
-                if (neoforge != null) {
-                    new NeoForge().apply(neoforge);
-                }
+                initSubProjectSettings(name, target);
             }
         }
+    }
+
+    private static void initSubProjectSettings(String name, @NotNull Project target) {
+        new Common().init(target.findProject(":" + name + "-common"));
+        new Fabric().init(target.findProject(":" + name + "-fabric"));
+        new Forge().init(target.findProject(":" + name + "-forge"));
+        new Quilt().init(target.findProject(":" + name + "-quilt"));
+        new NeoForge().init(target.findProject(":" + name + "-neoforge"));
     }
 
     private static void init(AclExtensions acl, Project project) {

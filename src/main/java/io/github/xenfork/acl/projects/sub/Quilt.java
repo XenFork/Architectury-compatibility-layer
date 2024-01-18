@@ -8,5 +8,6 @@ public class Quilt extends Basic {
     @Override
     public void apply(@NotNull Project target) {
         super.apply(target);
+        architecturyDepends();
     }
 }

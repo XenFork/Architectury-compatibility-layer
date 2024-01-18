@@ -3,32 +3,32 @@
   <groupId>io.github.xenfork</groupId>
   <artifactId>acl</artifactId>
   <versioning>
-    <lastUpdated>20240116012508</lastUpdated>
+    <lastUpdated>20240118151118</lastUpdated>
     <snapshot>
-      <timestamp>20240116.012508</timestamp>
-      <buildNumber>2</buildNumber>
+      <timestamp>20240118.151118</timestamp>
+      <buildNumber>4</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
+        <extension>pom</extension>
+        <value>1.1.14-20240118.151118-4</value>
+        <updated>20240118151118</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>1.1.14-20240118.151118-4</value>
+        <updated>20240118151118</updated>
+      </snapshotVersion>
+      <snapshotVersion>
         <extension>module</extension>
-        <value>1.1.14-20240116.012508-2</value>
-        <updated>20240116012508</updated>
+        <value>1.1.14-20240118.151118-4</value>
+        <updated>20240118151118</updated>
       </snapshotVersion>
       <snapshotVersion>
         <classifier>sources</classifier>
         <extension>jar</extension>
-        <value>1.1.14-20240116.012508-2</value>
-        <updated>20240116012508</updated>
-      </snapshotVersion>
-      <snapshotVersion>
-        <extension>jar</extension>
-        <value>1.1.14-20240116.012508-2</value>
-        <updated>20240116012508</updated>
-      </snapshotVersion>
-      <snapshotVersion>
-        <extension>pom</extension>
-        <value>1.1.14-20240116.012508-2</value>
-        <updated>20240116012508</updated>
+        <value>1.1.14-20240118.151118-4</value>
+        <updated>20240118151118</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>

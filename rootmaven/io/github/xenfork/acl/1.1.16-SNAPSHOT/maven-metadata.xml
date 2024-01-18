@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>io.github.xenfork</groupId>
+  <artifactId>acl</artifactId>
+  <versioning>
+    <lastUpdated>20240118162522</lastUpdated>
+    <snapshot>
+      <timestamp>20240118.162522</timestamp>
+      <buildNumber>4</buildNumber>
+    </snapshot>
+    <snapshotVersions>
+      <snapshotVersion>
+        <classifier>sources</classifier>
+        <extension>jar</extension>
+        <value>1.1.16-20240118.162522-4</value>
+        <updated>20240118162522</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>module</extension>
+        <value>1.1.16-20240118.162522-4</value>
+        <updated>20240118162522</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>1.1.16-20240118.162522-4</value>
+        <updated>20240118162522</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>1.1.16-20240118.162522-4</value>
+        <updated>20240118162522</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+  <version>1.1.16-SNAPSHOT</version>
+</metadata>

@@ -15,10 +15,14 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
+import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.tasks.DefaultSourceSetContainer;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.JavaPlugin;
+import org.gradle.api.publish.PublicationContainer;
+import org.gradle.api.publish.PublishingExtension;
+import org.gradle.api.publish.maven.MavenPublication;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.TaskProvider;
@@ -35,34 +39,35 @@ import static io.github.xenfork.acl.settings.MainSettings.acl;
 import static io.github.xenfork.acl.settings.MainSettings.sts;
 
 public class Common extends Basic {
+
+
     @Override
     public void apply(@NotNull Project target) {
         super.apply(target);
-        LoomGradleExtensionAPI loom = (LoomGradleExtensionAPI) target.getExtensions().getByName("loom");
+        architecturyCommonDepends();
+        flvDepends();
         ArchitectPluginExtension architectury = (ArchitectPluginExtension) target.getExtensions().getByName("architectury");
         File accesswidener = target.file("src/main/resources/" + archivesBaseName + ".accesswidener");
         if (accesswidener.exists()) {
             loom.getAccessWidenerPath().set(accesswidener);
         }
-        target.afterEvaluate(project -> {
-            SourceSet mainSourceSet = SourceSetHelper.getMainSourceSet(project);
 
-            mainSourceSet.resources(action -> {
-                Set<File> srcDirs = action.getSrcDirs();
-                srcDirs.add(project.file("src/main/generated/resources"));
-                action.setSrcDirs(srcDirs);
-                action.exclude(".cache");
-            });
+        mainSourceSet.resources(action -> {
+            Set<File> srcDirs = action.getSrcDirs();
+            srcDirs.add(target.file("src/main/generated/resources"));
+            action.setSrcDirs(srcDirs);
+            action.exclude(".cache");
         });
-//        SourceSetHelper.getMainSourceSet(target).getResources().getSrcDirs().add(target.file("src/main/generated/resources"));
+        PublishingExtension publishing = target.getExtensions().getByType(PublishingExtension.class);
+        RepositoryHandler repositories = publishing.getRepositories();
+        repositories.maven(mvn -> {
+            mvn.setUrl(target.getRootProject().file("rootmaven"));
+        });
+        PublicationContainer publications = publishing.getPublications();
+        MavenPublication mavenCommon = publications.create("mavenCommon", MavenPublication.class);
+        mavenCommon.setArtifactId(target.getName() + "-" + acl.getMcversion());
+        mavenCommon.from(target.getComponents().getByName("java"));
 
-//        target.afterEvaluate(project -> {
-//            DefaultSourceSetContainer sourceSets = (DefaultSourceSetContainer) project.getExtensions().getByName("sourceSets");
-//            SourceSet main = sourceSets.getByName("main");
-//            SourceDirectorySet resources = main.getResources();
-//            resources.getSrcDirs().add(target.file("src/main/generated/resources"));
-//            resources.exclude(".cache");
-//        });
         String[] split = sts.getPlatform().split(",", 4);
         List<String> platform = new ArrayList<>();
         AtomicBoolean hasNeo = new AtomicBoolean();
