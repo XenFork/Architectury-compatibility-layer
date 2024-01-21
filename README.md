@@ -7,3 +7,8 @@ repositories {
 	}
 }
 ```
+
+## other
+
+- publishing
+- you can publishing and using mavenLocal
