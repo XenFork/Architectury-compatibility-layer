@@ -10,6 +10,8 @@ import org.gradle.api.tasks.SourceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+
 import static io.github.xenfork.acl.settings.MainSettings.acl;
 
 public class Basic implements Plugin<Project> {
@@ -19,6 +21,8 @@ public class Basic implements Plugin<Project> {
     public static LoomGradleExtensionAPI loom;
     public static SourceSet mainSourceSet;
 
+    public File allScript;
+
     public void init(@Nullable Project target) {
         if (target != null) {
             apply(target);
@@ -27,7 +31,7 @@ public class Basic implements Plugin<Project> {
 
     @Override
     public void apply(@NotNull Project target) {
-
+        allScript = new File(target.getBuildDir(), "allscript.gradle");
         archivesBaseName = target.getName().split("-")[0];
         loader = target.getName().split("-")[1];
         dependencies = target.getDependencies();

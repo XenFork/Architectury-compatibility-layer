@@ -5,6 +5,7 @@ import io.github.xenfork.acl.mappings.Type;
 public class AclExtensions {
     private String mcversion, group, project$name, srg, flv, architectury$version, fapi, fgv;
     public String srg_out = "";
+    public int j = 17;
     public Type mappings;
 
     public String getGroup() {

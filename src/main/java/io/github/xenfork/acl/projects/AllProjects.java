@@ -1,22 +1,20 @@
 package io.github.xenfork.acl.projects;
 
-import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin;
-import dev.architectury.plugin.ArchitecturyPlugin;
+import cn.hutool.core.io.FileUtil;
 import io.github.xenfork.acl.settings.MainSettings;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
-import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.plugins.PluginContainer;
-import org.gradle.api.plugins.internal.DefaultJavaPluginExtension;
-import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 import org.gradle.api.tasks.TaskCollection;
 import org.gradle.api.tasks.compile.CompileOptions;
 import org.gradle.api.tasks.compile.JavaCompile;
 
-import static io.github.xenfork.acl.projects.Main.acl;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class AllProjects implements Plugin<Project> {
 
@@ -29,10 +27,10 @@ public class AllProjects implements Plugin<Project> {
         target.allprojects(action -> {
             action.getLogger().lifecycle("load project " + action.getName());
             PluginContainer plugins = action.getPlugins();
-            plugins.apply(JavaPlugin.class);
-            plugins.apply(MavenPublishPlugin.class);
-            plugins.apply(ArchitecturyPlugin.class);
-            plugins.apply(ShadowPlugin.class);
+            plugins.apply("java");
+            plugins.apply("maven-publish");
+            plugins.apply("architectury-plugin");
+            plugins.apply("com.github.johnrengelman.shadow");
             repositories = action.getRepositories();
             repositories.maven(mvn -> {
                 mvn.setUrl("https://maven.parchmentmc.org");
@@ -40,14 +38,27 @@ public class AllProjects implements Plugin<Project> {
             });
             target.setGroup(MainSettings.acl.getGroup());
             target.getExtensions().getExtraProperties().set("archivesBaseName", target.getName().split("-")[0]);
-            javac = target.getTasks().withType(JavaCompile.class);
-            javac.configureEach(it -> {
-                CompileOptions options = it.getOptions();
-                options.setEncoding("UTF-8");
-                options.getRelease().set(17);
+
+            String script = """
+                    tasks.withType(JavaCompile).configureEach {
+                        options.encoding = "UTF-8"
+                        options.release.set(%d)
+                    }
+
+                    java {
+                        java.withSourcesJar()
+                    }""".formatted(MainSettings.acl.j);
+            File allScript = new File(action.getRootProject().getBuildDir(), "allscript.gradle");
+            FileUtil.touch(allScript);
+            BufferedWriter writer = FileUtil.getWriter(allScript, StandardCharsets.UTF_8, false);
+            try {
+                writer.write(script);
+                writer.close();
+            } catch (IOException ignored) {}
+            action.apply(act -> {
+                act.from(allScript);
             });
-            java = target.getExtensions().getByType(JavaPluginExtension.class);
-            java.withSourcesJar();
+
         });
     }
 }

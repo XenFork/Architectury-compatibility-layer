@@ -1,5 +1,6 @@
 package io.github.xenfork.acl.projects.sub;
 
+import cn.hutool.core.io.FileUtil;
 import dev.architectury.plugin.ArchitectPluginExtension;
 import dev.architectury.plugin.ModLoader;
 import io.github.xenfork.acl.projects.Main;
@@ -28,7 +29,10 @@ import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.TaskProvider;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,12 +56,26 @@ public class Common extends Basic {
             loom.getAccessWidenerPath().set(accesswidener);
         }
 
-        mainSourceSet.resources(action -> {
-            Set<File> srcDirs = action.getSrcDirs();
-            srcDirs.add(target.file("src/main/generated/resources"));
-            action.setSrcDirs(srcDirs);
-            action.exclude(".cache");
+        String script = """
+                sourceSets {
+                    main {
+                        resources {
+                            srcDirs += file("src/main/generated/resources").absolutePath
+                            exclude ".cache"
+                        }
+                    }
+                }
+                """;
+        FileUtil.touch(allScript);
+        BufferedWriter writer = FileUtil.getWriter(allScript, StandardCharsets.UTF_8, false);
+        try {
+            writer.write(script);
+            writer.close();
+        } catch (IOException ignored) {}
+        target.apply(action -> {
+            action.from(allScript);
         });
+
         PublishingExtension publishing = target.getExtensions().getByType(PublishingExtension.class);
         RepositoryHandler repositories = publishing.getRepositories();
         repositories.maven(mvn -> {

@@ -12,6 +12,7 @@ import io.github.xenfork.acl.projects.sub.*;
 import io.github.xenfork.acl.settings.MainSettings;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.Task;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -27,16 +28,31 @@ public class Main implements Plugin<Project> {
 
     @Override
     public void apply(@NotNull Project target) {
+        target.getRootProject().setBuildDir(target.getRootProject().file(".gradle/build"));
         acl = target.getExtensions().create("acl", AclExtensions.class);
         target.getPlugins().apply(ArchitecturyPlugin.class);
-        System.out.println(MainSettings.acl.getSrg());
-        System.out.println(MainSettings.acl.getMcversion());
         init(MainSettings.acl, target);
         architectury = target.getExtensions().getByType(ArchitectPluginExtension.class);
         architectury.setMinecraft(MainSettings.acl.getMcversion());
         target.getPlugins().apply(AllProjects.class);
         target.getPlugins().apply(SubProjects.class);
         findProject(target);
+        target.afterEvaluate(project -> {
+            for (String p : MainSettings.sts.getProjects().split(",")) {
+                Task task = project.task(p + "_publish");
+                String platform = MainSettings.sts.getPlatform();
+                task.dependsOn(project.project(":" + p + "-common").getTasks().getByName("publish"));
+                if (platform != null) {
+                    for (String plat : platform.split(",")) {
+                        task.dependsOn(project.project(":%s-%s".formatted(p, plat)).getTasks().getByName("publish"));
+                    }
+                } else {
+                    task.dependsOn(project.project(":" + p + "-fabric").getTasks().getByName("publish"));
+                    task.dependsOn(project.project(":" + p + "-forge").getTasks().getByName("publish"));
+                }
+                task.setGroup("acl");
+            }
+        });
     }
     public static void findProject(@NotNull Project target) {
         String projects = (String) target.getProperties().get("sts.projects");
