@@ -3,10 +3,25 @@ package io.github.xenfork.acl.projects;
 import io.github.xenfork.acl.mappings.Type;
 
 public class AclExtensions {
+
     private String mcversion, group, project$name, srg, flv, architectury$version, fapi, fgv;
     public String srg_out = "";
     public int j = 17;
     public Type mappings;
+
+    public void copy(AclExtensions aclExtensions) {
+        this.mcversion = aclExtensions.mcversion;
+        this.group = aclExtensions.group;
+        this.project$name = aclExtensions.project$name;
+        this.srg = aclExtensions.srg;
+        this.flv = aclExtensions.flv;
+        this.architectury$version = aclExtensions.architectury$version;
+        this.fapi = aclExtensions.fapi;
+        this.fgv = aclExtensions.fgv;
+        this.srg_out = aclExtensions.srg_out;
+        this.j = aclExtensions.j;
+        this.mappings = aclExtensions.mappings;
+    }
 
     public String getGroup() {
         return group;

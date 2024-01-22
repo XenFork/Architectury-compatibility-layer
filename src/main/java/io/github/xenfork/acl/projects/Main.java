@@ -30,6 +30,7 @@ public class Main implements Plugin<Project> {
     public void apply(@NotNull Project target) {
         target.getRootProject().setBuildDir(target.getRootProject().file(".gradle/build"));
         acl = target.getExtensions().create("acl", AclExtensions.class);
+
         target.getPlugins().apply(ArchitecturyPlugin.class);
         init(MainSettings.acl, target);
         architectury = target.getExtensions().getByType(ArchitectPluginExtension.class);
@@ -106,5 +107,6 @@ public class Main implements Plugin<Project> {
                 MainSettings.acl.srg_out = "net.fabricmc:yarn:%s+build.%s".formatted(acl.getMcversion(), srg);
             }
         }
+        Main.acl.copy(MainSettings.acl);
     }
 }
