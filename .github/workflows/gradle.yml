@@ -26,7 +26,6 @@ jobs:
       - name: Gradle Build
         run: gradle clean build
 
-      =
       - name: Signing Secret Key File
         run: |
           mkdir ~/.gnupg
