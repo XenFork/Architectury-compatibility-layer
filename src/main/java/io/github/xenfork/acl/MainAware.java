@@ -21,5 +21,6 @@ public class MainAware implements Plugin<PluginAware> {
        } else if (target instanceof Project project) {
            new Main().apply(project);
        }
+
     }
 }
