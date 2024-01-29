@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - master
-
 jobs:
   publish:
     runs-on: ubuntu-latest
