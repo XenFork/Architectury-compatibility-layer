@@ -1,10 +1,10 @@
-
 plugins {
     id 'groovy'
     id 'java-gradle-plugin'
     id 'java'
     id 'idea'
     id 'eclipse'
+    id 'signing'
     id "org.jetbrains.kotlin.jvm" version "1.9.21"
     id 'maven-publish'
 }
@@ -28,6 +28,7 @@ dependencies {
     implementation(localGroovy())
     implementation("dev.architectury:architectury-loom:1.4-SNAPSHOT")
     implementation('commons-io:commons-io:2.15.0')
+
 //    implementation('com.google.code.gson:gson:2.10.1')
 //    implementation('com.fasterxml.jackson.core:jackson-databind:2.15.2')
     implementation('com.google.guava:guava:32.1.3-jre')
@@ -78,15 +79,15 @@ gradlePlugin {
 
     plugins {
         create("pre-acl") {
-            id = "pre-acl"
+            id = "io.github.xenfork.pre.acl"
             implementationClass = "io.github.xenfork.acl.settings.MainSettings"
         }// ☆ to step build-acl
         create("build-acl") {
-            id = "build-acl"
+            id = "io.github.xenfork.build.acl"
             implementationClass = "io.github.xenfork.acl.projects.Main"
         }// ☆
         create("acl") {
-            id = "acl"
+            id = "io.github.xenfork.acl"
             implementationClass = "io.github.xenfork.acl.MainAware"
         }// ★★★★★★
     }
@@ -99,32 +100,81 @@ jar {
     zip64 = true
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+java {
+    withSourcesJar()
+}
+
+sourcesJar {
     archiveClassifier.set("sources")
 
     from sourceSets.main.allSource
 }
 
-java {
-    withSourcesJar()
+publishing.publications {
+    register("mavenJava", MavenPublication) {
+        groupId project.group
+        artifactId project.name
+        version project.version
+        from components.java
+        description "This is architectury plugin and architectury loom compatibility layer"
+        pom {
+            name = "Architectury compatibility layer"
+            description = "This is architectury plugin and architectury loom compatibility layer"
+            url = "https://github.com/XenFork/Architectury-compatibility-layer"
+            licenses {
+                license {
+                    name = "MIT"
+                    url = "http://www.opensource.org/licenses/mit-license.php"
+                }
+            }
+            organization {
+                name = "XenFork"
+                url = "https://github.com/XenFork"
+            }
+            developers {
+                developer {
+                    name = "baka4n"
+                    email = "qq47489951@gmail.com"
+                }
+            }
+            scm {
+                connection = "scm:git:https://github.com/XenFork/Architectury-compatibility-layer.git"
+                developerConnection = "scm:git:https://github.com/XenFork/Architectury-compatibility-layer.git"
+                url = "https://github.com/XenFork/Architectury-compatibility-layer/tree/master"
+            }
+        }
+    }
+}
+publishing.repositories {
+    mavenLocal()
+//        maven {
+//            url rootProject.file("rootmaven")
+//        }
+    maven {
+        name("OSSRH_MAVEN")
+        url(
+                project.version.toString().endsWith("-SNAPSHOT") ?
+                        "https://s01.oss.sonatype.org/content/repositories/snapshots/" :
+                        "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+        )
+        credentials {
+            username(OSSRH_USERNAME)
+            password(OSSRH_PASSWORD)
+        }
+    }
 }
 
-publishing {
-    repositories {
-        mavenLocal()
-        maven {
-            url rootProject.file("rootmaven")
-        }
-    }
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.name
-            version project.version
-            from components.java
-        }
+signing {
+    if (!project.name.toString().endsWith("-SNAPSHOT") || Boolean.parseBoolean(System.getProperty("gpg.signing", "true"))) {
+//        useGpgCmd()
+        sign(publishing.publications.mavenJava)
+//        sign(publishing.publications)
     }
 }
+
+
+
+
 
 
 allprojects {
