@@ -2,12 +2,19 @@ package io.github.xenfork.acl.projects;
 
 import io.github.xenfork.acl.mappings.Type;
 
+/**
+ * @author baka4n
+ */
 public class AclExtensions {
 
     private String mcversion, group, project$name, srg, flv, architectury$version, fapi, fgv;
     public String srg_out = "";
     public int j = 17;
     public Type mappings;
+
+    /**
+     * @param aclExtensions acl extensions
+     */
 
     public void copy(AclExtensions aclExtensions) {
         this.mcversion = aclExtensions.mcversion;
@@ -51,6 +58,9 @@ public class AclExtensions {
         return flv;
     }
 
+    /**
+     * @param project$name this is project name
+     */
     public void setProject$name(String project$name) {
         this.project$name = project$name;
     }

@@ -78,11 +78,12 @@ dependencies {
 gradlePlugin {
 
     plugins {
-        create("pre-acl") {
+        create("pre_acl") {
             id = "io.github.xenfork.pre.acl"
             implementationClass = "io.github.xenfork.acl.settings.MainSettings"
+
         }// ☆ to step build-acl
-        create("build-acl") {
+        create("build_acl") {
             id = "io.github.xenfork.build.acl"
             implementationClass = "io.github.xenfork.acl.projects.Main"
         }// ☆
@@ -102,6 +103,21 @@ jar {
 
 java {
     withSourcesJar()
+    withJavadocJar()
+}
+
+javadoc {
+    failOnError = false
+    options {
+        encoding = "UTF-8"
+        locale = "en_US"
+        windowTitle = "${project.name}-${project.version}-Javadoc"
+        if (this instanceof StandardJavadocDocletOptions) {
+            charSet = "UTF-8"
+            isAuthor = true
+            links("https://docs.oracle.com/en/java/javase/17/docs/api/")
+        }
+    }
 }
 
 sourcesJar {
@@ -113,7 +129,7 @@ sourcesJar {
 publishing.publications {
     register("mavenJava", MavenPublication) {
         groupId project.group
-        artifactId project.name
+        artifactId "acl"
         version project.version
         from components.java
         description "This is architectury plugin and architectury loom compatibility layer"
@@ -133,6 +149,7 @@ publishing.publications {
             }
             developers {
                 developer {
+                    id = "baka4n"
                     name = "baka4n"
                     email = "qq47489951@gmail.com"
                 }
@@ -146,12 +163,9 @@ publishing.publications {
     }
 }
 publishing.repositories {
-    mavenLocal()
-//        maven {
-//            url rootProject.file("rootmaven")
-//        }
+
     maven {
-        name("OSSRH_MAVEN")
+        name("OSSRH")
         url(
                 project.version.toString().endsWith("-SNAPSHOT") ?
                         "https://s01.oss.sonatype.org/content/repositories/snapshots/" :
@@ -166,7 +180,8 @@ publishing.repositories {
 
 signing {
     if (!project.name.toString().endsWith("-SNAPSHOT") || Boolean.parseBoolean(System.getProperty("gpg.signing", "true"))) {
-//        useGpgCmd()
+        useGpgCmd()
+//        useInMemoryPgpKeys(keyId, password)
         sign(publishing.publications.mavenJava)
 //        sign(publishing.publications)
     }
