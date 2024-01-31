@@ -10,9 +10,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
-
+/**
+ * @author baka4n
+ */
 public class MainSettings implements Plugin<Settings> {
+    /**
+     * @since acl extension
+     */
     public static AclExtensions acl;
+    /**
+     * @since sts extension
+     */
     public static StsExtensions sts;
     @Override
     public void apply(@NotNull Settings target) {

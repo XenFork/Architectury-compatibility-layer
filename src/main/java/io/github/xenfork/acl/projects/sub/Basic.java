@@ -14,15 +14,40 @@ import java.io.File;
 
 import static io.github.xenfork.acl.settings.MainSettings.acl;
 
+/**
+ * @author baka4n
+ */
 public class Basic implements Plugin<Project> {
 
-    public String archivesBaseName, loader;
+    /**
+     * @since  archivesBaseName
+     */
+    public String archivesBaseName;
+    /**
+     * loader
+     */
+    public String loader;
+    /**
+     * @since dependencies
+     */
     public DependencyHandler dependencies;
+    /**
+     * @since loom extension
+     */
     public static LoomGradleExtensionAPI loom;
+    /**
+     * @since  source main
+     */
     public static SourceSet mainSourceSet;
 
+    /**
+     * @since  all script
+     */
     public File allScript;
 
+    /**
+     * @param target project
+     */
     public void init(@Nullable Project target) {
         if (target != null) {
             apply(target);

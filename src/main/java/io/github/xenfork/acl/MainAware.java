@@ -7,7 +7,9 @@ import org.gradle.api.Project;
 import org.gradle.api.initialization.Settings;
 import org.gradle.api.plugins.PluginAware;
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * @author baka4n
+ */
 public class MainAware implements Plugin<PluginAware> {
 
     @Override

@@ -12,10 +12,18 @@ import org.gradle.api.plugins.ExtraPropertiesExtension;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-
+/**
+ * @author baka4n
+ */
 public class SubProjects implements Plugin<Project> {
 
+    /**
+     * @since loom extensions
+     */
     public static LoomGradleExtensionAPI loom;
+    /**
+     * @since extra properties ext {}
+     */
     public static ExtraPropertiesExtension extraProperties;
 
     @SuppressWarnings({"UnstableApiUsage", "deprecation"})

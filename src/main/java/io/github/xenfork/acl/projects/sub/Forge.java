@@ -3,10 +3,8 @@ package io.github.xenfork.acl.projects.sub;
 import cn.hutool.core.io.FileUtil;
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin;
 import dev.architectury.plugin.ArchitectPluginExtension;
-import io.github.xenfork.acl.settings.MainSettings;
 import net.fabricmc.loom.api.LoomGradleExtensionAPI;
 import net.fabricmc.loom.configuration.ide.RunConfigSettings;
-import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.publish.PublicationContainer;
@@ -20,6 +18,9 @@ import java.nio.charset.StandardCharsets;
 
 import static io.github.xenfork.acl.settings.MainSettings.acl;
 
+/**
+ * @author baka4n
+ */
 public class Forge extends Basic {
 
     @Override

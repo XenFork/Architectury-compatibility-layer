@@ -8,8 +8,18 @@ import io.github.xenfork.acl.mappings.Type;
 public class AclExtensions {
 
     private String mcversion, group, project$name, srg, flv, architectury$version, fapi, fgv;
+
+    /**
+     * @since generate mapping srg
+     */
     public String srg_out = "";
-    public int j = 17;
+    /**
+     * @since gradle plugin set java version
+     */
+    public int java = 17;
+    /**
+     * @since mcp yarn mojang mapping set
+     */
     public Type mappings;
 
     /**
@@ -26,34 +36,55 @@ public class AclExtensions {
         this.fapi = aclExtensions.fapi;
         this.fgv = aclExtensions.fgv;
         this.srg_out = aclExtensions.srg_out;
-        this.j = aclExtensions.j;
+        this.java = aclExtensions.java;
         this.mappings = aclExtensions.mappings;
     }
 
+    /**
+     * @return get maven group
+     */
     public String getGroup() {
         return group;
     }
 
+    /**
+     * @param group set maven group
+     */
     public void setGroup(String group) {
         this.group = group;
     }
 
+    /**
+     * @return get minecraft version
+     */
     public String getMcversion() {
         return mcversion;
     }
 
+    /**
+     * @param mcversion set minecraft version
+     */
     public void setMcversion(String mcversion) {
         this.mcversion = mcversion;
     }
 
+    /**
+     * @return get project name
+     */
     public String getProject$name() {
         return project$name;
     }
 
+    /**
+     * @param flv set fabric loader version
+     */
     public void setFlv(String flv) {
         this.flv = flv;
     }
 
+    /**
+     * @return get fabric loader version
+     */
     public String getFlv() {
         return flv;
     }
@@ -65,20 +96,32 @@ public class AclExtensions {
         this.project$name = project$name;
     }
 
+    /**
+     * @param mappings set mapping
+     */
     public void setMappings(Type mappings) {
         this.mappings = mappings;
     }
 
+    /**
+     * @return get mapping
+     */
     public Type getMappings() {
         if (mappings == null)
             mappings = Type.mojang;
         return mappings;
     }
 
+    /**
+     * @param srg set mapping version
+     */
     public void setSrg(String srg) {
         this.srg = srg;
     }
 
+    /**
+     * @return mapping version
+     */
     public String getSrg() {
         //mojang的时候可空 空为原生，非空为parchment mapoing
         //parchment 如果想跨版本点映射获取请书写 version:parchment version
@@ -90,28 +133,46 @@ public class AclExtensions {
         return srg;
     }
 
+    /**
+     * @return architectury version
+     */
     public String getArchitectury$version() {
         if (architectury$version == null) architectury$version = "";
         return architectury$version;
     }
 
+    /**
+     * @param architectury$version set architectury version
+     */
     public void setArchitectury$version(String architectury$version) {
         this.architectury$version = architectury$version;
     }
 
+    /**
+     * @return get fabric api version
+     */
     public String getFapi() {
         if (fapi == null) fapi = "";
         return fapi;
     }
 
+    /**
+     * @param fapi set fabric api versions
+     */
     public void setFapi(String fapi) {
         this.fapi = fapi;
     }
 
+    /**
+     * @return get forge version
+     */
     public String getFgv() {
         return fgv;
     }
 
+    /**
+     * @param fgv set forge version
+     */
     public void setFgv(String fgv) {
         this.fgv = fgv;
     }

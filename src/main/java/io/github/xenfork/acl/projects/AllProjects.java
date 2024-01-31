@@ -8,7 +8,6 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.plugins.PluginContainer;
 import org.gradle.api.tasks.TaskCollection;
-import org.gradle.api.tasks.compile.CompileOptions;
 import org.gradle.api.tasks.compile.JavaCompile;
 
 import java.io.BufferedWriter;
@@ -16,10 +15,22 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author baka4n
+ */
 public class AllProjects implements Plugin<Project> {
 
+    /**
+     * @since repositories
+     */
     public static RepositoryHandler repositories;
+    /**
+     * @since java compile
+     */
     public static TaskCollection<JavaCompile> javac;
+    /**
+     * @since java extension
+     */
     public static JavaPluginExtension java;
     @Override
     public void apply(Project target) {
@@ -47,7 +58,7 @@ public class AllProjects implements Plugin<Project> {
 
                     java {
                         java.withSourcesJar()
-                    }""".formatted(MainSettings.acl.j);
+                    }""".formatted(MainSettings.acl.java);
             File allScript = new File(action.getRootProject().getBuildDir(), "allscript.gradle");
             FileUtil.touch(allScript);
             BufferedWriter writer = FileUtil.getWriter(allScript, StandardCharsets.UTF_8, false);

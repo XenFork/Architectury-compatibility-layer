@@ -1,10 +1,7 @@
 package io.github.xenfork.acl.projects;
 
-import cn.hutool.core.io.FileUtil;
-import com.google.common.io.Resources;
 import dev.architectury.plugin.ArchitectPluginExtension;
 import dev.architectury.plugin.ArchitecturyPlugin;
-import dev.architectury.plugin.ArchitecturyPluginExtensionKt;
 import io.github.xenfork.acl.mappings.Mojang;
 import io.github.xenfork.acl.mappings.Type;
 import io.github.xenfork.acl.mappings.Yarn;
@@ -14,16 +11,18 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * @author baka4n
+ */
 public class Main implements Plugin<Project> {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
-    }
+
+    /**
+     * @since acl extension
+     */
     public static AclExtensions acl;
+    /**
+     * @since architectury extension
+     */
     public static ArchitectPluginExtension architectury;
 
     @Override
@@ -55,6 +54,10 @@ public class Main implements Plugin<Project> {
             }
         });
     }
+
+    /**
+     * @param target inject project
+     */
     public static void findProject(@NotNull Project target) {
         String projects = (String) target.getProperties().get("sts.projects");
         if (!projects.isEmpty()) {

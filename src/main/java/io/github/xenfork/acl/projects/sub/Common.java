@@ -3,30 +3,12 @@ package io.github.xenfork.acl.projects.sub;
 import cn.hutool.core.io.FileUtil;
 import dev.architectury.plugin.ArchitectPluginExtension;
 import dev.architectury.plugin.ModLoader;
-import io.github.xenfork.acl.projects.Main;
-import io.github.xenfork.acl.settings.MainSettings;
 import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-import kotlin.reflect.jvm.internal.impl.storage.MemoizedFunctionToNotNull;
-import net.fabricmc.loom.LoomGradleExtension;
-import net.fabricmc.loom.api.LoomGradleExtensionAPI;
-import net.fabricmc.loom.util.ModPlatform;
-import net.fabricmc.loom.util.gradle.SourceSetHelper;
-import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
-import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
-import org.gradle.api.file.SourceDirectorySet;
-import org.gradle.api.internal.tasks.DefaultSourceSetContainer;
-import org.gradle.api.plugins.ExtensionContainer;
-import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.publish.PublicationContainer;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.MavenPublication;
-import org.gradle.api.tasks.SourceSet;
-import org.gradle.api.tasks.SourceSetContainer;
-import org.gradle.api.tasks.TaskProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
@@ -34,14 +16,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.github.xenfork.acl.settings.MainSettings.acl;
 import static io.github.xenfork.acl.settings.MainSettings.sts;
 
+/**
+ * @author baka4n
+ */
 public class Common extends Basic {
 
 

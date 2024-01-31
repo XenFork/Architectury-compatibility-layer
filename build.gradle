@@ -1,6 +1,7 @@
 plugins {
     id 'groovy'
-    id 'java-gradle-plugin'
+//    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '1.2.1'
     id 'java'
     id 'idea'
     id 'eclipse'
@@ -26,7 +27,7 @@ repositories {
 dependencies {
     implementation(gradleApi())
     implementation(localGroovy())
-    implementation("dev.architectury:architectury-loom:1.4-SNAPSHOT")
+    implementation("dev.architectury:architectury-loom:1.5-SNAPSHOT")
     implementation('commons-io:commons-io:2.15.0')
 
 //    implementation('com.google.code.gson:gson:2.10.1')
@@ -76,20 +77,29 @@ dependencies {
 
 //using ★ and ☆
 gradlePlugin {
-
+    website = "https://github.com/XenFork/Architectury-compatibility-layer"
+    vcsUrl = "https://github.com/XenFork/Architectury-compatibility-layer.git"
     plugins {
-        create("pre_acl") {
-            id = "io.github.xenfork.pre.acl"
+        preAcl {
+            id = "io.github.xenfork.acl.pre"
             implementationClass = "io.github.xenfork.acl.settings.MainSettings"
-
+            displayName = "Pre Architectury compatibility layer"
+            description = "Pre set acl plugin"
+            tags.addAll("acl", "architectury", "minecraft", "forge", "fabric", "neo-forge")
         }// ☆ to step build-acl
-        create("build_acl") {
-            id = "io.github.xenfork.build.acl"
+        "buildAcl" {
+            id = "io.github.xenfork.acl.build"
             implementationClass = "io.github.xenfork.acl.projects.Main"
+            displayName = "Build Architectury compatibility layer"
+            description = "Build set acl plugin"
+            tags.addAll("acl", "architectury", "minecraft", "forge", "fabric", "neo-forge")
         }// ☆
-        create("acl") {
+        "acl" {
             id = "io.github.xenfork.acl"
             implementationClass = "io.github.xenfork.acl.MainAware"
+            displayName = "Architectury compatibility layer"
+            description = "set acl plugin"
+            tags.addAll("acl", "architectury", "minecraft", "forge", "fabric", "neo-forge")
         }// ★★★★★★
     }
 }
@@ -120,6 +130,8 @@ javadoc {
     }
 }
 
+
+
 sourcesJar {
     archiveClassifier.set("sources")
 
@@ -127,62 +139,66 @@ sourcesJar {
 }
 
 publishing.publications {
-    register("mavenJava", MavenPublication) {
-        groupId project.group
-        artifactId "acl"
-        version project.version
-        from components.java
-        description "This is architectury plugin and architectury loom compatibility layer"
-        pom {
-            name = "Architectury compatibility layer"
-            description = "This is architectury plugin and architectury loom compatibility layer"
-            url = "https://github.com/XenFork/Architectury-compatibility-layer"
-            licenses {
-                license {
-                    name = "MIT"
-                    url = "http://www.opensource.org/licenses/mit-license.php"
-                }
-            }
-            organization {
-                name = "XenFork"
-                url = "https://github.com/XenFork"
-            }
-            developers {
-                developer {
-                    id = "baka4n"
-                    name = "baka4n"
-                    email = "qq47489951@gmail.com"
-                }
-            }
-            scm {
-                connection = "scm:git:https://github.com/XenFork/Architectury-compatibility-layer.git"
-                developerConnection = "scm:git:https://github.com/XenFork/Architectury-compatibility-layer.git"
-                url = "https://github.com/XenFork/Architectury-compatibility-layer/tree/master"
-            }
-        }
-    }
+//    register("mavenJava", MavenPublication) {
+//        groupId project.group
+//        artifactId "acl"
+//        version project.version
+//        from components.java
+//        description "This is architectury plugin and architectury loom compatibility layer"
+////        pom {
+////            name = "Architectury compatibility layer"
+////            description = "This is architectury plugin and architectury loom compatibility layer"
+////            url = "https://github.com/XenFork/Architectury-compatibility-layer"
+////            licenses {
+////                license {
+////                    name = "MIT"
+////                    url = "http://www.opensource.org/licenses/mit-license.php"
+////                }
+////            }
+////            organization {
+////                name = "XenFork"
+////                url = "https://github.com/XenFork"
+////            }
+////            developers {
+////                developer {
+////                    id = "baka4n"
+////                    name = "baka4n"
+////                    email = "qq47489951@gmail.com"
+////                }
+////            }
+////            scm {
+////                connection = "scm:git:https://github.com/XenFork/Architectury-compatibility-layer.git"
+////                developerConnection = "scm:git:https://github.com/XenFork/Architectury-compatibility-layer.git"
+////                url = "https://github.com/XenFork/Architectury-compatibility-layer/tree/master"
+////            }
+////        }
+//    }
 }
 publishing.repositories {
+//    mavenLocal()
+//    maven {
+//        name("OSSRH")
+//        url(
+//                project.version.toString().endsWith("-SNAPSHOT") ?
+//                        "https://s01.oss.sonatype.org/content/repositories/snapshots/" :
+//                        "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+//        )
+//        credentials {
+//            username(OSSRH_USERNAME)
+//            password(OSSRH_PASSWORD)
+//        }
+//    }
 
-    maven {
-        name("OSSRH")
-        url(
-                project.version.toString().endsWith("-SNAPSHOT") ?
-                        "https://s01.oss.sonatype.org/content/repositories/snapshots/" :
-                        "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-        )
-        credentials {
-            username(OSSRH_USERNAME)
-            password(OSSRH_PASSWORD)
-        }
-    }
 }
 
 signing {
     if (!project.name.toString().endsWith("-SNAPSHOT") || Boolean.parseBoolean(System.getProperty("gpg.signing", "true"))) {
         useGpgCmd()
+        for (final Publication name in publishing.publications) {
+            sign(name)
+        }
 //        useInMemoryPgpKeys(keyId, password)
-        sign(publishing.publications.mavenJava)
+
 //        sign(publishing.publications)
     }
 }
